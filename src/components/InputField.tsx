@@ -10,10 +10,11 @@ type InputFieldProps =  Partial<FieldInputProps<any>>  &{
 
 
 export const InputField: React.FC<InputFieldProps> = ({label, type,...props}) => {
-
-    const [field, { error }] = useField(props)
+    
+    const [field, meta] = useField(props)
+    // console.log(error)
     return (
-        <FormControl isInvalid={error ? true : false}>
+        <FormControl isInvalid={!!meta.error}>
             <FormLabel htmlFor={field.name}>{label}</FormLabel>
             <Input
                 {...field}
@@ -22,7 +23,8 @@ export const InputField: React.FC<InputFieldProps> = ({label, type,...props}) =>
                 type={type}
                 
             />
-                {error ? <FormErrorMessage >{error}</FormErrorMessage> : null}
+            
+            {meta.error ? <FormErrorMessage>{meta.error}</FormErrorMessage> : null}
             
         </FormControl>
 
