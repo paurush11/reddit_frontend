@@ -1,0 +1,8 @@
+query Me {
+  Me {
+    _id
+    createdAt
+    updatedAt
+    username
+  }
+}
