@@ -12,15 +12,20 @@ interface NavbarProps {
 
 
 export const Navbar: React.FC<NavbarProps> = ({ }) => {
-    const [{ data, fetching }] = useQuery({ query: MeDocument , pause: isServer()})
-    const [{fetching:logoutFetching}, logout] = useMutation(LogoutDocument)
+    const [{ data, fetching }] = useQuery({ query: MeDocument, pause: isServer() })
+    const [{ fetching: logoutFetching }, logout] = useMutation(LogoutDocument)
     let body = null
     if (fetching) {
         //loading
+        body = (<div>
+            
+        </div>)
     }
     else if (!data?.Me) {
         //user not logged in
-        body = (<>
+        body = (
+
+
             <Box ml={'auto'}>
                 <NextLink href={'/login'}>
                     <Link mr={2} color={'white'}>Login</Link>
@@ -32,24 +37,33 @@ export const Navbar: React.FC<NavbarProps> = ({ }) => {
 
 
             </Box>
-        </>)
+
+        )
     } else {
         //user  logged in
-        body = (<Flex>
-            <Box mr={2} color={'white'}>
-                {data.Me.username}
-            </Box>
-            <Button variant='link' isLoading={logoutFetching}
-            onClick={()=>{
-                logout({})
-                }}>Logout</Button>
-        </Flex>)
+        body = (
+            
+
+            <Flex>
+                <Box mr={2} color={'white'}>
+                    {data.Me.username}
+                </Box>
+                <Button variant='link' isLoading={logoutFetching}
+                    onClick={() => {
+                        logout({})
+                    }}>Logout
+                </Button>
+            </Flex>
+                    
+        )
 
     }
     return (
-        <Flex bg={'tan'} p={4} >
+        <Flex bg={'tan'} p={4}>
+
 
             {body}
+
 
         </Flex>);
 }

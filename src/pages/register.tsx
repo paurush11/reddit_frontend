@@ -25,7 +25,9 @@ const Register: React.FC<registerProps> = ({ }) => {
 
                 onSubmit={async (values, { setErrors }) => {
 
-                    const response = await register(values)
+                    const response = await register({
+                        options: values
+                    })
                     if (response.data?.register.errors){
                         setErrors(toErrorMap(response.data.register.errors))
                     }else if(response.data?.register.user){
@@ -37,7 +39,8 @@ const Register: React.FC<registerProps> = ({ }) => {
                 
                 initialValues={{
                     username: "",
-                    password: ""
+                    password: "",
+                    email:""
                 }}>
                 {({ isSubmitting }) => (
                     <Form >
@@ -48,7 +51,13 @@ const Register: React.FC<registerProps> = ({ }) => {
                         />
                         
                         <Box mt={4}>
+                        <InputField
+                            name='email'
+                            label='Email'
 
+                        />
+                        </Box>
+                        <Box mt={4}>
                             <InputField
                                 name='password'
                                 label='Password'
