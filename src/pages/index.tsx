@@ -1,5 +1,5 @@
 import { withUrqlClient } from "next-urql"
-import Navbar from "../components/Navbar"
+import {Navbar} from "../components/Navbar"
 import { createUrqlClient } from "../utils/createUrqlClient"
 import { PostsDocument } from "../generated/output/graphql"
 import { useQuery } from "urql"
@@ -11,7 +11,7 @@ const Index = () => {
 
   return (
     <>
-      <Navbar pageProps={undefined} />
+      <Navbar  />
       <div>
         Hello world
       </div>
