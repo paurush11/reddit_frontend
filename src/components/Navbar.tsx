@@ -4,12 +4,14 @@ import NextLink from 'next/link';
 import React from 'react'
 import { useMutation, useQuery } from 'urql';
 import { LogoutDocument, MeDocument } from '../generated/output/graphql';
+import { withUrqlClient } from 'next-urql';
+import { createUrqlClient } from '../utils/createUrqlClient';
 
 interface NavbarProps {
 
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ }) => {
+const Navbar: React.FC<NavbarProps> = ({ }) => {
     const [{ data, fetching }] = useQuery({ query: MeDocument })
     const [{fetching:logoutFetching}, logout] = useMutation(LogoutDocument)
     let body = null
@@ -51,3 +53,4 @@ export const Navbar: React.FC<NavbarProps> = ({ }) => {
 
         </Flex>);
 }
+export default withUrqlClient(createUrqlClient)(Navbar);

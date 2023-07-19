@@ -9,6 +9,8 @@ import { Wrapper } from '../components/Wrapper';
 import { LoginDocument } from '../generated/output/graphql';
 import { toErrorMap } from '../utils/toErrorMap';
 import { Box, Button } from '@chakra-ui/react';
+import { withUrqlClient } from 'next-urql';
+import { createUrqlClient } from '../utils/createUrqlClient';
 
 interface loginProps {
 
@@ -63,4 +65,4 @@ const Login: React.FC<loginProps> = ({ }) => {
         </Wrapper>
     );
 }
-export default Login
+export default withUrqlClient(createUrqlClient)(Login)
