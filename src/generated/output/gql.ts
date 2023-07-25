@@ -14,6 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "fragment RegularUser on User {\n  _id\n  createdAt\n  updatedAt\n  username\n}": types.RegularUserFragmentDoc,
+    "mutation ChangePassword($token: String!, $newPassword: String!) {\n  changePassword(token: $token, newPassword: $newPassword) {\n    errors {\n      field\n      message\n    }\n    user {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n  }\n}": types.ChangePasswordDocument,
     "mutation Login($password: String!, $UserNameOrEmail: String!) {\n  login(password: $password, UserNameOrEmail: $UserNameOrEmail) {\n    errors {\n      field\n      message\n    }\n    user {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n  }\n}": types.LoginDocument,
     "mutation Logout {\n  logout\n}": types.LogoutDocument,
     "mutation Register($options: UserNameOrEmailPassword!) {\n  register(options: $options) {\n    user {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n    errors {\n      field\n      message\n    }\n  }\n}": types.RegisterDocument,
@@ -39,6 +40,10 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "fragment RegularUser on User {\n  _id\n  createdAt\n  updatedAt\n  username\n}"): (typeof documents)["fragment RegularUser on User {\n  _id\n  createdAt\n  updatedAt\n  username\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation ChangePassword($token: String!, $newPassword: String!) {\n  changePassword(token: $token, newPassword: $newPassword) {\n    errors {\n      field\n      message\n    }\n    user {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n  }\n}"): (typeof documents)["mutation ChangePassword($token: String!, $newPassword: String!) {\n  changePassword(token: $token, newPassword: $newPassword) {\n    errors {\n      field\n      message\n    }\n    user {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

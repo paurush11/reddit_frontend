@@ -17,9 +17,7 @@ export const Navbar: React.FC<NavbarProps> = ({ }) => {
     let body = null
     if (fetching) {
         //loading
-        body = (<div>
-            
-        </div>)
+        
     }
     else if (!data?.Me) {
         //user not logged in
