@@ -8,9 +8,10 @@ import { InputField } from '../components/InputField';
 import { Wrapper } from '../components/Wrapper';
 import { LoginDocument } from '../generated/output/graphql';
 import { toErrorMap } from '../utils/toErrorMap';
-import { Box, Button } from '@chakra-ui/react';
+import { Box, Button, Flex, Link } from '@chakra-ui/react';
 import { withUrqlClient } from 'next-urql';
 import { createUrqlClient } from '../utils/createUrqlClient';
+import NextLink from 'next/link'
 
 interface loginProps {
 
@@ -47,7 +48,7 @@ const Login: React.FC<loginProps> = ({ }) => {
                             label='Username or Email'
 
                         />
-
+                        
                         <Box mt={4}>
 
                             <InputField
@@ -57,8 +58,19 @@ const Login: React.FC<loginProps> = ({ }) => {
 
                             />
                         </Box>
+                        
 
+                        <Flex mt={2}>
+                            <NextLink style={{ marginLeft: 'auto' }} href={'/forgot-password'}>
+                                
+                                <Link>Regenerate the Link</Link>
+
+                            </NextLink>
+                        </Flex>
+                        
                         <Button mt={4} isLoading={isSubmitting} background="teal" color="white" type='submit'>Login</Button>
+                    
+
                     </Form>
                 )}
             </Formik>

@@ -26,6 +26,7 @@
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
     "react-ssr-prepass": "^1.5.0",
+    "typeorm": "^0.3.17",
     "urql": "^4.0.4"
   },
   "devDependencies": {
