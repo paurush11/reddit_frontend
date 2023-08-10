@@ -42,7 +42,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           variant="link"
           isLoading={logoutFetching}
           onClick={() => {
-            logout({});
+            logout({})
           }}
         >
           Logout
