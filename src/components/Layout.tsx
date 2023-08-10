@@ -3,7 +3,7 @@ import { Wrapper, variantWrapper } from "./Wrapper";
 import { Navbar } from "./Navbar";
 
 interface LayoutProps {
-  variant: variantWrapper;
+  variant?: variantWrapper;
   children: any;
 }
 

@@ -3,13 +3,14 @@ import { Navbar } from "../components/Navbar";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { PostsDocument } from "../generated/output/graphql";
 import { useQuery } from "urql";
+import { Layout } from "../components/Layout";
 
 const Index = () => {
   const [{ data, fetching }] = useQuery({ query: PostsDocument });
 
   return (
-    <>
-      <Navbar />
+    <Layout>
+      
 
       {!data ? (
         <div>...loading</div>
@@ -20,7 +21,7 @@ const Index = () => {
           })}
         </div>
       )}
-    </>
+    </Layout>
   );
 };
 
