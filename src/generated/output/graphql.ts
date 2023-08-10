@@ -56,7 +56,7 @@ export type MutationChangePasswordArgs = {
 };
 
 export type MutationCreatePostArgs = {
-  Title: Scalars["String"]["input"];
+  input: PostInput;
 };
 
 export type MutationDeleteArgs = {
@@ -89,8 +89,16 @@ export type Post = {
   __typename?: "Post";
   _id: Scalars["Float"]["output"];
   createdAt: Scalars["DateTime"]["output"];
+  creatorId: Scalars["Float"]["output"];
+  points: Scalars["Float"]["output"];
+  text: Scalars["String"]["output"];
   title: Scalars["String"]["output"];
   updatedAt: Scalars["DateTime"]["output"];
+};
+
+export type PostInput = {
+  text: Scalars["String"]["input"];
+  title: Scalars["String"]["input"];
 };
 
 export type Query = {
@@ -157,6 +165,24 @@ export type ChangePasswordMutation = {
       username: string;
       email: string;
     } | null;
+  };
+};
+
+export type CreatePostMutationVariables = Exact<{
+  input: PostInput;
+}>;
+
+export type CreatePostMutation = {
+  __typename?: "Mutation";
+  createPost: {
+    __typename?: "Post";
+    _id: number;
+    creatorId: number;
+    createdAt: any;
+    updatedAt: any;
+    title: string;
+    text: string;
+    points: number;
   };
 };
 
@@ -382,6 +408,63 @@ export const ChangePasswordDocument = {
   ChangePasswordMutation,
   ChangePasswordMutationVariables
 >;
+export const CreatePostDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "CreatePost" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "PostInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "createPost" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "_id" } },
+                { kind: "Field", name: { kind: "Name", value: "creatorId" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                { kind: "Field", name: { kind: "Name", value: "title" } },
+                { kind: "Field", name: { kind: "Name", value: "text" } },
+                { kind: "Field", name: { kind: "Name", value: "points" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<CreatePostMutation, CreatePostMutationVariables>;
 export const ForgotPasswordDocument = {
   kind: "Document",
   definitions: [

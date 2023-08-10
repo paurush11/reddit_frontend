@@ -7,6 +7,21 @@ import {
 import { betterUpdateQuery } from "./betterUpdateQuery";
 import { cacheExchange, Cache } from "@urql/exchange-graphcache";
 
+import { filter, pipe, tap } from 'wonka';
+import { Exchange } from 'urql';
+import { useRouter } from "next/router";
+
+const router = useRouter();
+const errorExchange: Exchange = ({ forward }) => ops$ => {
+  return pipe(
+    forward(ops$),
+    tap(({ error }) => {
+     if(error?.message.includes("not authenticated")){
+      router.replace('/login')
+     }
+    })
+  );
+};
 export const createUrqlClient = (ssrExchange: any) => ({
   url: "http://localhost:4000/graphql",
   exchanges: [
@@ -25,6 +40,7 @@ export const createUrqlClient = (ssrExchange: any) => ({
         },
       },
     }),
+    errorExchange,
     ssrExchange,
     fetchExchange,
   ],
@@ -44,3 +60,7 @@ const invalidateCache = (cache: Cache) => {
     cache.invalidate("Query", "getPosts", fi.arguments);
   });
 };
+function sentryFireAndForgetHere() {
+  throw new Error("Function not implemented.");
+}
+
