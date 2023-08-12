@@ -114,6 +114,11 @@ export type QueryPostArgs = {
   identifier: Scalars["Int"]["input"];
 };
 
+export type QueryPostsArgs = {
+  cursor?: InputMaybe<Scalars["String"]["input"]>;
+  limit: Scalars["Float"]["input"];
+};
+
 export type User = {
   __typename?: "User";
   _id: Scalars["Float"]["output"];
@@ -261,16 +266,22 @@ export type MeQuery = {
   } | null;
 };
 
-export type PostsQueryVariables = Exact<{ [key: string]: never }>;
+export type PostsQueryVariables = Exact<{
+  limit: Scalars["Float"]["input"];
+  cursor?: InputMaybe<Scalars["String"]["input"]>;
+}>;
 
 export type PostsQuery = {
   __typename?: "Query";
   posts: Array<{
     __typename?: "Post";
     _id: number;
+    creatorId: number;
     createdAt: any;
     updatedAt: any;
     title: string;
+    text: string;
+    points: number;
   }>;
 };
 
@@ -760,19 +771,61 @@ export const PostsDocument = {
       kind: "OperationDefinition",
       operation: "query",
       name: { kind: "Name", value: "Posts" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "limit" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "Float" } },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "cursor" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+      ],
       selectionSet: {
         kind: "SelectionSet",
         selections: [
           {
             kind: "Field",
             name: { kind: "Name", value: "posts" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "limit" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "limit" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "cursor" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "cursor" },
+                },
+              },
+            ],
             selectionSet: {
               kind: "SelectionSet",
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "_id" } },
+                { kind: "Field", name: { kind: "Name", value: "creatorId" } },
                 { kind: "Field", name: { kind: "Name", value: "createdAt" } },
                 { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
                 { kind: "Field", name: { kind: "Name", value: "title" } },
+                { kind: "Field", name: { kind: "Name", value: "text" } },
+                { kind: "Field", name: { kind: "Name", value: "points" } },
               ],
             },
           },

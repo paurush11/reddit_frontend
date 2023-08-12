@@ -15,7 +15,7 @@ import { useIsAuth } from "../utils/useIsAuth";
 
 const CreatePost: React.FC<{}> = ({}) => {
   const [, post] = useMutation(CreatePostDocument);
-    useIsAuth()
+  useIsAuth();
   return (
     <Layout variant="small">
       <Formik

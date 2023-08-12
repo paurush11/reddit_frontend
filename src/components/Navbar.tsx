@@ -17,6 +17,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   let body = null;
   if (fetching) {
     //loading
+    body = <div>Loading...</div>;
   } else if (!data?.Me) {
     //user not logged in
     body = (
@@ -42,7 +43,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           variant="link"
           isLoading={logoutFetching}
           onClick={() => {
-            logout({})
+            logout({});
           }}
         >
           Logout

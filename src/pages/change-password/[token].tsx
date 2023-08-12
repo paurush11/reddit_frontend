@@ -15,7 +15,7 @@ import NextLink from "next/link";
 
 const ChangePassword: NextPage = () => {
   const GQLTOKENERROR =
-    '[GraphQL] select "u0".* from "user" as "u0" where "u0"."_id" = NaN limit 1 - column "nan" does not exist'; // redis a;dready deleted the value
+    '[GraphQL] select "u0".* from "user" as "u0" where "u0"."_id" = NaN limit 1 - column "nan" does not exist'; // redis already deleted the value
   const [tokenError, setTokenError] = useState("");
   const [, changePassword] = useMutation(ChangePasswordDocument);
   const router = useRouter();
@@ -24,7 +24,8 @@ const ChangePassword: NextPage = () => {
       <Formik
         initialValues={{
           newPassword: "",
-          token: typeof router.query.token === 'string'? router.query.token : '',
+          token:
+            typeof router.query.token === "string" ? router.query.token : "",
         }}
         onSubmit={async (values, { setErrors }) => {
           const response = await changePassword(values);
@@ -81,7 +82,5 @@ const ChangePassword: NextPage = () => {
     </Wrapper>
   );
 };
-
- 
 
 export default withUrqlClient(createUrqlClient)(ChangePassword);
