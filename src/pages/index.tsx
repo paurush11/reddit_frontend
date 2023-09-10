@@ -1,5 +1,4 @@
 import { withUrqlClient } from "next-urql";
-import { Navbar } from "../components/Navbar";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { PostsDocument } from "../generated/output/graphql";
 import { useQuery } from "urql";
@@ -14,13 +13,19 @@ import {
   Button,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
+import { useState } from "react";
 const Index = () => {
+  const [variables, setVariables] = useState({
+    limit: 10,
+    cursor: null as null | string,
+  });
   const [{ data, fetching }] = useQuery({
     query: PostsDocument,
-    variables: {
-      limit: 100,
-    },
+    variables: variables,
   });
+
+  console.log(variables);
+  console.log(data);
 
   return (
     <Layout variant="regular">
@@ -47,7 +52,16 @@ const Index = () => {
 
       {data ? (
         <Flex>
-          <Button m={"auto"} mt={8}>
+          <Button
+            m={"auto"}
+            mt={8}
+            onClick={() => {
+              setVariables({
+                limit: variables.limit,
+                cursor: data.posts[data.posts.length - 1].createdAt,
+              });
+            }}
+          >
             load More
           </Button>
         </Flex>
