@@ -24,9 +24,6 @@ const Index = () => {
     variables: variables,
   });
 
-  console.log(variables);
-  console.log(data);
-
   return (
     <Layout variant="regular">
       <Flex align={"center"}>
@@ -39,7 +36,7 @@ const Index = () => {
         <div>...loading</div>
       ) : (
         <Stack spacing={8}>
-          {data!.posts.map((post) => {
+          {data!.posts.Posts.map((post) => {
             return (
               <Box key={post._id} p={5} shadow="md" borderWidth="4px">
                 <Heading fontSize="xl">{post.title}</Heading>
@@ -50,7 +47,7 @@ const Index = () => {
         </Stack>
       )}
 
-      {data ? (
+      {data && data.posts.hasMore ? (
         <Flex>
           <Button
             m={"auto"}
@@ -58,7 +55,7 @@ const Index = () => {
             onClick={() => {
               setVariables({
                 limit: variables.limit,
-                cursor: data.posts[data.posts.length - 1].createdAt,
+                cursor: data.posts.Posts[data.posts.Posts.length - 1].createdAt,
               });
             }}
           >

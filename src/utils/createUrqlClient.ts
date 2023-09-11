@@ -33,12 +33,15 @@ export const cursorPagination = (): Resolver => {
     if (size === 0) {
       return undefined;
     }
-    
+
     const isItInTheCache = cache.resolve(entityKey, fieldName, fieldArgs);
     info.partial = !isItInTheCache;
     const results: string[] = [];
     fieldInfos.forEach((fieldInfo) => {
-      const data = cache.resolveFieldByKey(entityKey, fieldInfo.fieldKey) as string[];
+      const data = cache.resolveFieldByKey(
+        entityKey,
+        fieldInfo.fieldKey,
+      ) as string[];
       results.push(...data);
     });
 
