@@ -23,6 +23,7 @@ const Index = () => {
     query: PostsDocument,
     variables: variables,
   });
+  console.log(data);
 
   return (
     <Layout variant="regular">
