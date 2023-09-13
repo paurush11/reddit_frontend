@@ -36,7 +36,7 @@ export const cursorPagination = (): Resolver => {
     const fieldKey = `${fieldName}(${stringifyVariables(fieldArgs)})`;
     const isItInTheCache = cache.resolve(
       cache.resolveFieldByKey(entityKey, fieldKey) as string,
-      "posts"
+      "posts",
     );
     // const isItInTheCache = cache.resolve(cache.resolve(entityKey, fieldName, fieldArgs) as string, "posts");
     info.partial = !isItInTheCache;
@@ -52,8 +52,7 @@ export const cursorPagination = (): Resolver => {
       if (!_hasMore) {
         hasMore = _hasMore as boolean;
       }
-      if(data)
-      results.push(...data);
+      if (data) results.push(...data);
     });
 
     return {

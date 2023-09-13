@@ -48,6 +48,7 @@ export type Mutation = {
   logout: Scalars["Boolean"]["output"];
   register: UserResponse;
   updatePost?: Maybe<Post>;
+  vote: Scalars["Boolean"]["output"];
 };
 
 export type MutationChangePasswordArgs = {
@@ -85,6 +86,11 @@ export type MutationUpdatePostArgs = {
   Title?: InputMaybe<Scalars["String"]["input"]>;
 };
 
+export type MutationVoteArgs = {
+  postId: Scalars["Int"]["input"];
+  value: Scalars["Int"]["input"];
+};
+
 export type PaginatedPosts = {
   __typename?: "PaginatedPosts";
   Posts: Array<Post>;
@@ -95,6 +101,7 @@ export type Post = {
   __typename?: "Post";
   _id: Scalars["Float"]["output"];
   createdAt: Scalars["DateTime"]["output"];
+  creator: User;
   creatorId: Scalars["Float"]["output"];
   points: Scalars["Float"]["output"];
   text: Scalars["String"]["output"];
@@ -291,6 +298,14 @@ export type PostsQuery = {
       title: string;
       text: string;
       points: number;
+      creator: {
+        __typename?: "User";
+        email: string;
+        username: string;
+        _id: number;
+        createdAt: any;
+        updatedAt: any;
+      };
     }>;
   };
 };
@@ -829,6 +844,7 @@ export const PostsDocument = {
             selectionSet: {
               kind: "SelectionSet",
               selections: [
+                { kind: "Field", name: { kind: "Name", value: "hasMore" } },
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "Posts" },
@@ -839,6 +855,35 @@ export const PostsDocument = {
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "creatorId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "email" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "username" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "_id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
+                          ],
+                        },
                       },
                       {
                         kind: "Field",
@@ -857,7 +902,6 @@ export const PostsDocument = {
                     ],
                   },
                 },
-                { kind: "Field", name: { kind: "Name", value: "hasMore" } },
               ],
             },
           },

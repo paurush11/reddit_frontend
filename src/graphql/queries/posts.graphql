@@ -1,14 +1,21 @@
 query Posts($limit: Float!, $cursor: String) {
   posts(limit: $limit, cursor: $cursor) {
+    hasMore
     Posts {
       _id
       creatorId
+      creator {
+        email
+        username
+        _id
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
       title
       text
       points
     }
-    hasMore
   }
 }

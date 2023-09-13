@@ -28,7 +28,7 @@ const documents = {
     types.RegisterDocument,
   "query Me {\n  Me {\n    _id\n    createdAt\n    updatedAt\n    username\n  }\n}":
     types.MeDocument,
-  "query Posts($limit: Float!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    Posts {\n      _id\n      creatorId\n      createdAt\n      updatedAt\n      title\n      text\n      points\n    }\n    hasMore\n  }\n}":
+  "query Posts($limit: Float!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    hasMore\n    Posts {\n      _id\n      creatorId\n      creator {\n        email\n        username\n        _id\n        createdAt\n        updatedAt\n      }\n      createdAt\n      updatedAt\n      title\n      text\n      points\n    }\n  }\n}":
     types.PostsDocument,
 };
 
@@ -98,8 +98,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "query Posts($limit: Float!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    Posts {\n      _id\n      creatorId\n      createdAt\n      updatedAt\n      title\n      text\n      points\n    }\n    hasMore\n  }\n}",
-): (typeof documents)["query Posts($limit: Float!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    Posts {\n      _id\n      creatorId\n      createdAt\n      updatedAt\n      title\n      text\n      points\n    }\n    hasMore\n  }\n}"];
+  source: "query Posts($limit: Float!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    hasMore\n    Posts {\n      _id\n      creatorId\n      creator {\n        email\n        username\n        _id\n        createdAt\n        updatedAt\n      }\n      createdAt\n      updatedAt\n      title\n      text\n      points\n    }\n  }\n}",
+): (typeof documents)["query Posts($limit: Float!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    hasMore\n    Posts {\n      _id\n      creatorId\n      creator {\n        email\n        username\n        _id\n        createdAt\n        updatedAt\n      }\n      createdAt\n      updatedAt\n      title\n      text\n      points\n    }\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

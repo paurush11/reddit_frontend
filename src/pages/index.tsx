@@ -23,7 +23,6 @@ const Index = () => {
     query: PostsDocument,
     variables: variables,
   });
-  console.log(data);
 
   return (
     <Layout variant="regular">
@@ -41,6 +40,7 @@ const Index = () => {
             return (
               <Box key={post._id} p={5} shadow="md" borderWidth="4px">
                 <Heading fontSize="xl">{post.title}</Heading>
+                <Text> Posted By - {post.creator.username}</Text>
                 <Text mt={4}>{post.text.slice(0, 200)}</Text>
               </Box>
             );
