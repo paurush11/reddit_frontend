@@ -41,6 +41,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         </Box>
         <Button
           variant="link"
+          color={"BLACK"}
           isLoading={logoutFetching}
           onClick={() => {
             logout({});
@@ -52,7 +53,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
     );
   }
   return (
-    <Flex position={"sticky"} top={0} zIndex={1} bg={"tan"} p={4}>
+    <Flex position={"sticky"} top={0} zIndex={1} bg={"#ED001C"} p={4}>
       {body}
     </Flex>
   );
