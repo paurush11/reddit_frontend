@@ -65,81 +65,84 @@ export const cursorPagination = (): Resolver => {
   };
 };
 export const createUrqlClient = (ssrExchange: any, ctx: any) => {
-  let cookie
-  if(isServer() ){
-    cookie = ctx?.req.headers.cookie
-    console.log(cookie)
+  let cookie;
+  if (isServer()) {
+    cookie = ctx?.req.headers.cookie;
+    console.log(cookie);
   }
-  return (
-   {
-  url: "http://localhost:4000/graphql",
-  exchanges: [
-    cacheExchange({
-      resolvers: {
-        Query: {
-          posts: cursorPagination(),
+  return {
+    url: "http://localhost:4000/graphql",
+    exchanges: [
+      cacheExchange({
+        resolvers: {
+          Query: {
+            posts: cursorPagination(),
+          },
         },
-      },
-      updates: {
-        Mutation: {
-          vote: (_result, args, cache, info) => {
-            const { postId, value } = args as VoteMutationVariables;
-            const data = cache.readFragment(
-              gql`
-                fragment _ on Post {
-                  id
-                  points
-                  voteStatus
-                }
-              `,
-              { id: postId } as any,
-            );
-
-            if (data) {
-              if (data.voteStatus === value) {
-                return;
-              }
-              const newPoints = data.points + (!data.voteStatus ? 1:2)*value;
-              cache.writeFragment(
+        updates: {
+          Mutation: {
+            vote: (_result, args, cache, info) => {
+              const { postId, value } = args as VoteMutationVariables;
+              const data = cache.readFragment(
                 gql`
                   fragment _ on Post {
+                    id
                     points
                     voteStatus
                   }
                 `,
-                { id: postId, points: newPoints ,voteStatus: value},
+                { id: postId } as any,
               );
-            }
-          },
-          createPost: (_result, args, cache, info) => {
-            invalidateCache(cache);
-          },
-          logout: (_result, args, cache, info) => {
-            invalidateCache(cache);
-            betterUpdateQuery<LogoutMutation, MeQuery>(
-              cache,
-              { query: MeDocument },
-              _result,
-              () => ({ Me: null }),
-            );
+
+              if (data) {
+                if (data.voteStatus === value) {
+                  return;
+                }
+                const newPoints =
+                  data.points + (!data.voteStatus ? 1 : 2) * value;
+                cache.writeFragment(
+                  gql`
+                    fragment _ on Post {
+                      points
+                      voteStatus
+                    }
+                  `,
+                  { id: postId, points: newPoints, voteStatus: value },
+                );
+              }
+            },
+            createPost: (_result, args, cache, info) => {
+              invalidateCache(cache);
+            },
+            logout: (_result, args, cache, info) => {
+              invalidateCache(cache);
+              betterUpdateQuery<LogoutMutation, MeQuery>(
+                cache,
+                { query: MeDocument },
+                _result,
+                () => ({ Me: null }),
+              );
+            },
           },
         },
-      },
-    }),
-    errorExchange,
-    ssrExchange,
-    fetchExchange,
-  ],
-  fetchOptions: {
-    credentials: "include" as const,
-    headers: cookie? {
-      "x-forwarded-proto": "https", /// to set cookie in browser
-      cookie
-    }:{
-      "x-forwarded-proto": "https",
+      }),
+      errorExchange,
+      ssrExchange,
+      fetchExchange,
+    ],
+    fetchOptions: {
+      credentials: "include" as const,
+      headers: cookie
+        ? {
+            "x-forwarded-proto": "https", /// to set cookie in browser
+            cookie,
+          }
+        : {
+            "x-forwarded-proto": "https",
+          },
     },
-  },
-})};
+  };
+};
 
 const invalidateCache = (cache: Cache) => {
   const allFields = cache.inspectFields("Query");
