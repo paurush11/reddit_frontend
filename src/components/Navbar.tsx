@@ -15,7 +15,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   });
   const [{ fetching: logoutFetching }, logout] = useMutation(LogoutDocument);
   let body = null;
-  if (fetching) {
+  if ( isServer() || fetching) {
     //loading
     body = <div>Loading...</div>;
   } else if (!data?.Me) {

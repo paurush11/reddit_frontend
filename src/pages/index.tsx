@@ -19,7 +19,7 @@ import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import { UpvoteSection } from "../components/UpvoteSection";
 const Index = () => {
   const [variables, setVariables] = useState({
-    limit: 10,
+    limit: 20,
     cursor: null as null | string,
   });
   const [{ data, fetching }] = useQuery({

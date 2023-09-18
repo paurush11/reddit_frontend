@@ -10,11 +10,8 @@ interface UpvoteSectionProps {
 
 export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
   const [, vote] = useMutation(VoteDocument);
-  const [selectedNumber, setSelectedNumber] = useState<"one" | "two" | "none">(
-    "none",
-  );
   const iconColor = "red";
-  console.log(selectedNumber);
+
   return (
     <Flex
       direction={"column"}
@@ -23,27 +20,27 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
       mr={7}
     >
       <IconButton
-        colorScheme={selectedNumber === "one" ? iconColor : "blue"}
+        colorScheme={ post.voteStatus === 1 ? iconColor : null}
         aria-label={"upvote"}
         onClick={() => {
           vote({
             value: 1,
             postId: post._id,
           });
-          setSelectedNumber("one");
+         
         }}
         icon={<ChevronUpIcon />}
       />
       {post.points}
       <IconButton
-        colorScheme={selectedNumber === "two" ? iconColor : "blue"}
+        colorScheme={ post.voteStatus === -1 ? iconColor : null}
         aria-label={"downvote"}
         onClick={() => {
           vote({
             value: -1,
             postId: post._id,
           });
-          setSelectedNumber("two");
+          
         }}
         icon={<ChevronDownIcon />}
       />

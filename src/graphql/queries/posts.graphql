@@ -12,10 +12,11 @@ query Posts($limit: Float!, $cursor: String) {
         updatedAt
       }
       createdAt
-      updatedAt
       title
       text
       points
+      voteStatus
+      updatedAt
     }
   }
 }
