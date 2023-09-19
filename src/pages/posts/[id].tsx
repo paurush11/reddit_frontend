@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useQuery } from "urql";
 import { PostDocument } from "../../generated/output/graphql";
 import { Layout } from "../../components/Layout";
+import { Heading } from "@chakra-ui/react";
 
 const Post = ({}) => {
   const router = useRouter();
@@ -21,11 +22,17 @@ const Post = ({}) => {
     variables: variables,
   });
 
-  if(error)console.log(error)
-if(data)console.log(intId)
-  return (
+  if (error) console.log(error);
+  if (data) console.log(intId);
+  return fetching ? (
     <Layout>
-      { fetching ? <div>loading...</div> :  <div>{data?.post?.text}</div>}
+      {" "}
+      <div>loading...</div>
+    </Layout>
+  ) : (
+    <Layout>
+      <Heading>{data.post.title}</Heading>
+      <div>{data?.post?.text}</div>
     </Layout>
   );
 };

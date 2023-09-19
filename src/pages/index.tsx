@@ -29,26 +29,25 @@ const Index = () => {
 
   return (
     <Layout variant="regular">
-      <Flex align={"center"} justifyContent={"space-between"} mb={4}>
-        <Heading>LiReddit</Heading>
-        <NextLink href={"./create-post"}>
-          <Link ml={"auto"}>Create Posts</Link>
-        </NextLink>
-      </Flex>
+      
       {!data && fetching ? (
         <div>...loading</div>
       ) : (
         <Stack spacing={8}>
           {data!.posts.Posts.map((post) => {
             return (
-              <Flex key={post._id} p={5} shadow="md" borderWidth="4px">
-                <UpvoteSection post={post} />
-                <Box>
-                  <Heading fontSize="xl">{post.title}</Heading>
-                  <Text> Posted By - {post.creator.username}</Text>
-                  <Text mt={4}>{post.text.slice(0, 200)}</Text>
-                </Box>
-              </Flex>
+              <NextLink href={"/posts/[id]"} as={`/posts/${post._id}`}>
+                <Link>
+                  <Flex key={post._id} p={5} shadow="md" borderWidth="4px">
+                    <UpvoteSection post={post} />
+                    <Box>
+                      <Heading fontSize="xl">{post.title}</Heading>
+                      <Text> Posted By - {post.creator.username}</Text>
+                      <Text mt={4}>{post.text.slice(0, 200)}</Text>
+                    </Box>
+                  </Flex>
+                </Link>
+              </NextLink>
             );
           })}
         </Stack>
