@@ -65,7 +65,7 @@ export type MutationDeleteArgs = {
 };
 
 export type MutationDeletePostArgs = {
-  Identifier: Scalars["Float"]["input"];
+  id: Scalars["Int"]["input"];
 };
 
 export type MutationForgotPasswordArgs = {
@@ -203,6 +203,15 @@ export type CreatePostMutation = {
     text: string;
     points: number;
   };
+};
+
+export type DeletePostMutationVariables = Exact<{
+  id: Scalars["Int"]["input"];
+}>;
+
+export type DeletePostMutation = {
+  __typename?: "Mutation";
+  deletePost?: boolean | null;
 };
 
 export type ForgotPasswordMutationVariables = Exact<{
@@ -537,6 +546,45 @@ export const CreatePostDocument = {
     },
   ],
 } as unknown as DocumentNode<CreatePostMutation, CreatePostMutationVariables>;
+export const DeletePostDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "DeletePost" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "deletePost" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "id" },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<DeletePostMutation, DeletePostMutationVariables>;
 export const ForgotPasswordDocument = {
   kind: "Document",
   definitions: [

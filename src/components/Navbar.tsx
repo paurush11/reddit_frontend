@@ -36,25 +36,26 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
     //user  logged in
     body = (
       <Flex alignItems={"center"} justifyContent={"center"} gap={8}>
-        <NextLink href={"./create-post"} >
-          <Link as={Button} ml={"auto"} >Create Posts</Link>
+        <NextLink href={"./create-post"}>
+          <Link as={Button} ml={"auto"}>
+            Create Posts
+          </Link>
         </NextLink>
         <Flex gap={2}>
-
-        <Box mr={2} color={"white"} >
-          {data.Me.username}
-        </Box>
-        <Button
-          variant="link"
-          color={"BLACK"}
-          isLoading={logoutFetching}
-          onClick={() => {
-            logout({});
-          }}
+          <Box mr={2} color={"white"}>
+            {data.Me.username}
+          </Box>
+          <Button
+            variant="link"
+            color={"BLACK"}
+            isLoading={logoutFetching}
+            onClick={() => {
+              logout({});
+            }}
           >
-          Logout
-        </Button>
-          </Flex>
+            Logout
+          </Button>
+        </Flex>
       </Flex>
     );
   }
@@ -65,7 +66,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           <Heading>LiReddit</Heading>
         </Link>
       </NextLink>
-      
+
       <Box ml={"auto"}>{body}</Box>
     </Flex>
   );
