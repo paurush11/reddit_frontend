@@ -20,7 +20,7 @@ import { EditDeleteButtons } from "../components/EditDeleteButtons";
 
 const Index = () => {
   const [variables, setVariables] = useState({
-    limit: 20,
+    limit: 40,
     cursor: null as null | string,
   });
   const [{ data, fetching }] = useQuery({

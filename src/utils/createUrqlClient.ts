@@ -6,6 +6,7 @@ import {
   VoteMutationVariables,
   DeletePostMutationVariables,
   LoginMutation,
+  RegisterMutation,
 } from "../generated/output/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
 import { cacheExchange, Cache, Resolver } from "@urql/exchange-graphcache";
@@ -83,6 +84,23 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
         },
         updates: {
           Mutation: {
+            register: (_result, args, cache, info)=>{
+              invalidateCache(cache);
+              betterUpdateQuery<RegisterMutation, MeQuery>(
+                cache,
+                { query: MeDocument },
+                _result,
+                (result, query) => {
+                  if (result.register.errors) {
+                    return query;
+                  } else {
+                    return {
+                      Me: result.register.user,
+                    };
+                  }
+                },
+              )
+            },
             login: (_result, args, cache, info) => {
               invalidateCache(cache);
               betterUpdateQuery<LoginMutation, MeQuery>(
