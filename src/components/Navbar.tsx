@@ -5,10 +5,12 @@ import React from "react";
 import { useMutation, useQuery } from "urql";
 import { LogoutDocument, MeDocument } from "../generated/output/graphql";
 import { isServer } from "../utils/isServer";
+import { useRouter } from "next/router";
 
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
+  const router = useRouter();
   const [{ data, fetching }] = useQuery({
     query: MeDocument,
     pause: isServer(),
@@ -51,6 +53,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             isLoading={logoutFetching}
             onClick={() => {
               logout({});
+              router.reload();
             }}
           >
             Logout

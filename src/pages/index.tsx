@@ -22,7 +22,9 @@ import { useState } from "react";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { UpvoteSection } from "../components/UpvoteSection";
 
+
 const Index = () => {
+
   const [variables, setVariables] = useState({
     limit: 20,
     cursor: null as null | string,
@@ -55,7 +57,7 @@ const Index = () => {
                   <Text> Posted By - {post.creator.username}</Text>
                   <Text mt={4}>{post.text.slice(0, 200)}</Text>
                 </Box>
-                {meData.Me._id === post.creatorId && (
+                {meData?.Me?._id === post.creatorId && (
                   <Box ml={"auto"}>
                     <NextLink
                       href={"/posts/edit/[id]"}
@@ -107,4 +109,4 @@ const Index = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(Index);
+export default withUrqlClient(createUrqlClient, { ssr: true , } )(Index);
