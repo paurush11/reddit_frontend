@@ -18,9 +18,13 @@ const editPost = ({}) => {
     <Layout variant="small">
       <Formik
         onSubmit={async (values) => {
-            console.log(values)
-            const response = await updatePost({ text: values.text  , title: values.title , updatePostId: data.post._id });
-            if (!response.error) router.back();
+          console.log(values);
+          const response = await updatePost({
+            text: values.text,
+            title: values.title,
+            updatePostId: data.post._id,
+          });
+          if (!response.error) router.back();
         }}
         initialValues={{
           title: data.post.title,

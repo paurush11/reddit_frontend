@@ -22,9 +22,7 @@ import { useState } from "react";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { UpvoteSection } from "../components/UpvoteSection";
 
-
 const Index = () => {
-
   const [variables, setVariables] = useState({
     limit: 20,
     cursor: null as null | string,
@@ -109,4 +107,4 @@ const Index = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true , } )(Index);
+export default withUrqlClient(createUrqlClient, { ssr: true })(Index);

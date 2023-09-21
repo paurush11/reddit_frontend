@@ -83,19 +83,20 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
         },
         updates: {
           Mutation: {
-            login: (_result, args, cache, info) =>{
+            login: (_result, args, cache, info) => {
               invalidateCache(cache);
               betterUpdateQuery<LoginMutation, MeQuery>(
                 cache,
                 { query: MeDocument },
                 _result,
                 (result, query) => {
-                  if(result.login.errors){return query;}
-                  else {
-                    return{
-                      Me: result.login.user
+                  if (result.login.errors) {
+                    return query;
+                  } else {
+                    return {
+                      Me: result.login.user,
+                    };
                   }
-                }
                 },
               );
             },

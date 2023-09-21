@@ -1,16 +1,14 @@
-import { Box, Button, Flex, Link } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import React, { useEffect } from "react";
-import { Wrapper } from "../components/Wrapper";
+import React from "react";
 
-import NextLink from "next/link";
-import { InputField } from "../components/InputField";
-import { useMutation, useQuery } from "urql";
-import { CreatePostDocument, MeDocument } from "../generated/output/graphql";
 import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "../utils/createUrqlClient";
-import router, { useRouter } from "next/router";
+import router from "next/router";
+import { useMutation } from "urql";
+import { InputField } from "../components/InputField";
 import { Layout } from "../components/Layout";
+import { CreatePostDocument } from "../generated/output/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 import { useIsAuth } from "../utils/useIsAuth";
 
 const CreatePost: React.FC<{}> = ({}) => {

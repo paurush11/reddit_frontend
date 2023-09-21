@@ -1,15 +1,14 @@
-import React from "react";
-import { Formik, Form } from "formik";
-import { Wrapper } from "../components/Wrapper";
-import { InputField } from "../components/InputField";
-import { Box, Button, FormErrorMessage } from "@chakra-ui/react";
-import { useMutation } from "urql";
-import { RegisterDocument } from "../generated/output/graphql";
-import { toErrorMap } from "../utils/toErrorMap";
-import { error } from "console";
-import { useRouter } from "next/router";
+import { Box, Button } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
+import { useRouter } from "next/router";
+import React from "react";
+import { useMutation } from "urql";
+import { InputField } from "../components/InputField";
+import { Wrapper } from "../components/Wrapper";
+import { RegisterDocument } from "../generated/output/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import { toErrorMap } from "../utils/toErrorMap";
 
 interface registerProps {}
 
