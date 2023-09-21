@@ -6,24 +6,10 @@ import { useQuery } from "urql";
 import { PostDocument } from "../../generated/output/graphql";
 import { Layout } from "../../components/Layout";
 import { Heading } from "@chakra-ui/react";
+import { useGetPostFromUrl } from "../../utils/useGetPostFromUrl";
 
 const Post = ({}) => {
-  const router = useRouter();
-  const intId =
-    typeof router.query.id === "string"
-      ? parseInt(router.query.id as string)
-      : -1;
-  const [variables, setVariables] = useState({
-    identifier: intId,
-  });
-
-  const [{ data, error, fetching }] = useQuery({
-    query: PostDocument,
-    variables: variables,
-  });
-
-  if (error) console.log(error);
-  if (data) console.log(intId);
+  const [{ data, error, fetching }] = useGetPostFromUrl();
   return fetching ? (
     <Layout>
       {" "}

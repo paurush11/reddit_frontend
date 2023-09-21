@@ -28,6 +28,8 @@ const documents = {
   "mutation Logout {\n  logout\n}": types.LogoutDocument,
   "mutation Register($options: UserNameOrEmailPassword!) {\n  register(options: $options) {\n    user {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n    errors {\n      field\n      message\n    }\n  }\n}":
     types.RegisterDocument,
+  "mutation UpdatePost($updatePostId: Int!, $text: String, $title: String) {\n  updatePost(id: $updatePostId, Text: $text, Title: $title) {\n    _id\n    creatorId\n    voteStatus\n    createdAt\n    updatedAt\n    title\n    text\n    points\n  }\n}":
+    types.UpdatePostDocument,
   "mutation Vote($value: Int!, $postId: Int!) {\n  vote(value: $value, postId: $postId)\n}":
     types.VoteDocument,
   "query Me {\n  Me {\n    _id\n    createdAt\n    updatedAt\n    username\n  }\n}":
@@ -100,6 +102,12 @@ export function graphql(
 export function graphql(
   source: "mutation Register($options: UserNameOrEmailPassword!) {\n  register(options: $options) {\n    user {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n    errors {\n      field\n      message\n    }\n  }\n}",
 ): (typeof documents)["mutation Register($options: UserNameOrEmailPassword!) {\n  register(options: $options) {\n    user {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n    errors {\n      field\n      message\n    }\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "mutation UpdatePost($updatePostId: Int!, $text: String, $title: String) {\n  updatePost(id: $updatePostId, Text: $text, Title: $title) {\n    _id\n    creatorId\n    voteStatus\n    createdAt\n    updatedAt\n    title\n    text\n    points\n  }\n}",
+): (typeof documents)["mutation UpdatePost($updatePostId: Int!, $text: String, $title: String) {\n  updatePost(id: $updatePostId, Text: $text, Title: $title) {\n    _id\n    creatorId\n    voteStatus\n    createdAt\n    updatedAt\n    title\n    text\n    points\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

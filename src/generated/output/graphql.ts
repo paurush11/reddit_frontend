@@ -82,8 +82,9 @@ export type MutationRegisterArgs = {
 };
 
 export type MutationUpdatePostArgs = {
-  Identifier: Scalars["Float"]["input"];
+  Text?: InputMaybe<Scalars["String"]["input"]>;
   Title?: InputMaybe<Scalars["String"]["input"]>;
+  id: Scalars["Int"]["input"];
 };
 
 export type MutationVoteArgs = {
@@ -274,6 +275,27 @@ export type RegisterMutation = {
       message: string;
     }> | null;
   };
+};
+
+export type UpdatePostMutationVariables = Exact<{
+  updatePostId: Scalars["Int"]["input"];
+  text?: InputMaybe<Scalars["String"]["input"]>;
+  title?: InputMaybe<Scalars["String"]["input"]>;
+}>;
+
+export type UpdatePostMutation = {
+  __typename?: "Mutation";
+  updatePost?: {
+    __typename?: "Post";
+    _id: number;
+    creatorId: number;
+    voteStatus?: number | null;
+    createdAt: any;
+    updatedAt: any;
+    title: string;
+    text: string;
+    points: number;
+  } | null;
 };
 
 export type VoteMutationVariables = Exact<{
@@ -845,6 +867,90 @@ export const RegisterDocument = {
     },
   ],
 } as unknown as DocumentNode<RegisterMutation, RegisterMutationVariables>;
+export const UpdatePostDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "UpdatePost" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "updatePostId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "text" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "title" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "updatePost" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "updatePostId" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "Text" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "text" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "Title" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "title" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "_id" } },
+                { kind: "Field", name: { kind: "Name", value: "creatorId" } },
+                { kind: "Field", name: { kind: "Name", value: "voteStatus" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                { kind: "Field", name: { kind: "Name", value: "title" } },
+                { kind: "Field", name: { kind: "Name", value: "text" } },
+                { kind: "Field", name: { kind: "Name", value: "points" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UpdatePostMutation, UpdatePostMutationVariables>;
 export const VoteDocument = {
   kind: "Document",
   definitions: [
