@@ -289,12 +289,10 @@ export type UpdatePostMutation = {
     __typename?: "Post";
     _id: number;
     creatorId: number;
-    voteStatus?: number | null;
     createdAt: any;
     updatedAt: any;
     title: string;
     text: string;
-    points: number;
   } | null;
 };
 
@@ -937,12 +935,10 @@ export const UpdatePostDocument = {
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "_id" } },
                 { kind: "Field", name: { kind: "Name", value: "creatorId" } },
-                { kind: "Field", name: { kind: "Name", value: "voteStatus" } },
                 { kind: "Field", name: { kind: "Name", value: "createdAt" } },
                 { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
                 { kind: "Field", name: { kind: "Name", value: "title" } },
                 { kind: "Field", name: { kind: "Name", value: "text" } },
-                { kind: "Field", name: { kind: "Name", value: "points" } },
               ],
             },
           },

@@ -1,11 +1,7 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
-import {
-  DeletePostDocument,
-  MeDocument,
-  PostsDocument,
-} from "../generated/output/graphql";
-import { useMutation, useQuery } from "urql";
+import { MeDocument, PostsDocument } from "../generated/output/graphql";
+import { useQuery } from "urql";
 import { Layout } from "../components/Layout";
 import {
   Box,
@@ -15,12 +11,12 @@ import {
   Link,
   Flex,
   Button,
-  IconButton,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useState } from "react";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+
 import { UpvoteSection } from "../components/UpvoteSection";
+import { EditDeleteButtons } from "../components/EditDeleteButtons";
 
 const Index = () => {
   const [variables, setVariables] = useState({
@@ -34,7 +30,6 @@ const Index = () => {
   const [{ data: meData }] = useQuery({
     query: MeDocument,
   });
-  const [, deletePost] = useMutation(DeletePostDocument);
 
   return (
     <Layout variant="regular">
@@ -55,32 +50,7 @@ const Index = () => {
                   <Text> Posted By - {post.creator.username}</Text>
                   <Text mt={4}>{post.text.slice(0, 200)}</Text>
                 </Box>
-                {meData?.Me?._id === post.creatorId && (
-                  <Box ml={"auto"}>
-                    <NextLink
-                      href={"/posts/edit/[id]"}
-                      as={`/posts/edit/${post._id}`}
-                    >
-                      <IconButton
-                        as={Link}
-                        mr={2}
-                        aria-label={"edit"}
-                        onClick={() => {}}
-                        icon={<EditIcon />}
-                      />
-                    </NextLink>
-                    <IconButton
-                      colorScheme={"red"}
-                      aria-label={"delete"}
-                      onClick={() => {
-                        deletePost({
-                          id: post._id,
-                        });
-                      }}
-                      icon={<DeleteIcon />}
-                    />
-                  </Box>
-                )}
+                {meData?.Me?._id === post.creatorId && <Box ml={"auto"}> <EditDeleteButtons post={post}></EditDeleteButtons></Box>}
               </Flex>
             ),
           )}

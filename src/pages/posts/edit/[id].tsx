@@ -14,7 +14,10 @@ import { useGetPostFromUrl } from "../../../utils/useGetPostFromUrl";
 const editPost = ({}) => {
   const [{ data, error, fetching }] = useGetPostFromUrl();
   const [, updatePost] = useMutation(UpdatePostDocument);
-  return (
+
+  return fetching ? (
+    <Layout variant="small">...Loading</Layout>
+  ) : (
     <Layout variant="small">
       <Formik
         onSubmit={async (values) => {
@@ -24,6 +27,7 @@ const editPost = ({}) => {
             title: values.title,
             updatePostId: data.post._id,
           });
+          console.log(response);
           if (!response.error) router.back();
         }}
         initialValues={{
