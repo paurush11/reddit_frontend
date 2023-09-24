@@ -50,7 +50,12 @@ const Index = () => {
                   <Text> Posted By - {post.creator.username}</Text>
                   <Text mt={4}>{post.text.slice(0, 200)}</Text>
                 </Box>
-                {meData?.Me?._id === post.creatorId && <Box ml={"auto"}> <EditDeleteButtons post={post}></EditDeleteButtons></Box>}
+                {meData?.Me?._id === post.creatorId && (
+                  <Box ml={"auto"}>
+                    {" "}
+                    <EditDeleteButtons post={post}></EditDeleteButtons>
+                  </Box>
+                )}
               </Flex>
             ),
           )}

@@ -6,20 +6,19 @@ import { DeletePostDocument, PostQuery } from "../generated/output/graphql";
 
 export const EditDeleteButtons = ({ post }: PostQuery) => {
   const [, deletePost] = useMutation(DeletePostDocument);
-  const router = useRouter()
+  const router = useRouter();
   return (
     <>
-      
-        <IconButton
-          as={Link}
-          mr={2}
-          aria-label={"edit"}
-          onClick={() => {
-            router.push(`/posts/edit/${post._id}`)
-          }}
-          icon={<EditIcon />}
-        />
-     
+      <IconButton
+        as={Link}
+        mr={2}
+        aria-label={"edit"}
+        onClick={() => {
+          router.push(`/posts/edit/${post._id}`);
+        }}
+        icon={<EditIcon />}
+      />
+
       <IconButton
         colorScheme={"red"}
         aria-label={"delete"}

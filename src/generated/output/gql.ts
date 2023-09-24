@@ -32,7 +32,7 @@ const documents = {
     types.UpdatePostDocument,
   "mutation Vote($value: Int!, $postId: Int!) {\n  vote(value: $value, postId: $postId)\n}":
     types.VoteDocument,
-  "query Me {\n  Me {\n    _id\n    createdAt\n    updatedAt\n    username\n  }\n}":
+  "query Me {\n  Me {\n    _id\n    createdAt\n    updatedAt\n    username\n    email\n  }\n}":
     types.MeDocument,
   "query Post($identifier: Int!) {\n  post(identifier: $identifier) {\n    _id\n    creatorId\n    creator {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n    voteStatus\n    createdAt\n    updatedAt\n    title\n    text\n    points\n  }\n}":
     types.PostDocument,
@@ -118,8 +118,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "query Me {\n  Me {\n    _id\n    createdAt\n    updatedAt\n    username\n  }\n}",
-): (typeof documents)["query Me {\n  Me {\n    _id\n    createdAt\n    updatedAt\n    username\n  }\n}"];
+  source: "query Me {\n  Me {\n    _id\n    createdAt\n    updatedAt\n    username\n    email\n  }\n}",
+): (typeof documents)["query Me {\n  Me {\n    _id\n    createdAt\n    updatedAt\n    username\n    email\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

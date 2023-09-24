@@ -61,7 +61,7 @@ export type MutationCreatePostArgs = {
 };
 
 export type MutationDeleteArgs = {
-  options: Scalars["String"]["input"];
+  username: Scalars["String"]["input"];
 };
 
 export type MutationDeletePostArgs = {
@@ -313,6 +313,7 @@ export type MeQuery = {
     createdAt: any;
     updatedAt: any;
     username: string;
+    email: string;
   } | null;
 };
 
@@ -1028,6 +1029,7 @@ export const MeDocument = {
                 { kind: "Field", name: { kind: "Name", value: "createdAt" } },
                 { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
                 { kind: "Field", name: { kind: "Name", value: "username" } },
+                { kind: "Field", name: { kind: "Name", value: "email" } },
               ],
             },
           },

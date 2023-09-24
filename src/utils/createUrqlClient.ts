@@ -84,7 +84,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
         },
         updates: {
           Mutation: {
-            register: (_result, args, cache, info)=>{
+            register: (_result, args, cache, info) => {
               invalidateCache(cache);
               betterUpdateQuery<RegisterMutation, MeQuery>(
                 cache,
@@ -99,7 +99,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                     };
                   }
                 },
-              )
+              );
             },
             login: (_result, args, cache, info) => {
               invalidateCache(cache);

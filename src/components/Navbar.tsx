@@ -1,12 +1,21 @@
-import { Box, Button, Center, Flex, Heading, Icon, Link, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Heading,
+  IconButton,
+  Link,
+  Text,
+} from "@chakra-ui/react";
 import NextLink from "next/link";
+import { AiOutlineUser } from "react-icons/ai";
 
 import React from "react";
 import { useMutation, useQuery } from "urql";
 import { LogoutDocument, MeDocument } from "../generated/output/graphql";
 import { isServer } from "../utils/isServer";
 import { useRouter } from "next/router";
-
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
@@ -23,15 +32,14 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   } else if (!data?.Me) {
     //user not logged in
     body = (
-     
-      <Flex alignContent={"center"} m={"auto"} >
+      <Flex alignContent={"center"} m={"auto"}>
         <NextLink href={"/login"} passHref>
-          <Link  mr={2} color={"white"} >
+          <Link mr={2} color={"white"}>
             Login
           </Link>
         </NextLink>
         <NextLink href={"/register"} passHref>
-          <Link  color={"white"}>Register</Link>
+          <Link color={"white"}>Register</Link>
         </NextLink>
       </Flex>
     );
@@ -45,12 +53,20 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           </Link>
         </NextLink>
         <Flex gap={2}>
-          <Box mr={2} color={"white"}>
+          <Box
+            as={Button}
+            mr={2}
+            gap={2}
+            onClick={() => {
+              router.push("/profile");
+            }}
+          >
+            <AiOutlineUser />
             {data.Me.username}
           </Box>
           <Button
             variant="link"
-            color={"BLACK"}
+            color={"black"}
             isLoading={logoutFetching}
             onClick={() => {
               logout({});
@@ -64,9 +80,16 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
     );
   }
   return (
-    <Flex position={"sticky"} top={0} zIndex={1} bg={"#ED001C"} p={4} alignItems={"center"}>
+    <Flex
+      position={"sticky"}
+      top={0}
+      zIndex={1}
+      bg={"#ED001C"}
+      p={4}
+      alignItems={"center"}
+    >
       <NextLink href={"/"} passHref>
-        <Link >
+        <Link>
           <Heading>LiReddit</Heading>
         </Link>
       </NextLink>
