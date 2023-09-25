@@ -1,0 +1,21 @@
+query MyPosts($limit: Float!, $cursor: String) {
+  myPosts(limit: $limit, cursor: $cursor) {
+    Posts {
+      _id
+      creatorId
+      creator {
+        _id
+        createdAt
+        updatedAt
+        username
+        email
+      }
+      createdAt
+      updatedAt
+      title
+      text
+      points
+    }
+    hasMore
+  }
+}

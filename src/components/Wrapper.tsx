@@ -17,7 +17,7 @@ export const Wrapper: React.FC<WrapperProps> = ({ children, variant }) => {
           ? "800px"
           : variant === "small"
           ? "400px"
-          : "1000px"
+          : "1500px"
       }
       w="100%"
     >

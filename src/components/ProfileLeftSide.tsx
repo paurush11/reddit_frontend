@@ -1,9 +1,14 @@
 import { Box, Button, Flex } from "@chakra-ui/react";
 import React from "react";
+import { MyPostsQuery, Post } from "../generated/output/graphql";
 
-interface ProfileLeftSideProps {}
+interface ProfileLeftSideProps {
+  allPosts: MyPostsQuery;
+}
 
-export const ProfileLeftSide: React.FC<ProfileLeftSideProps> = ({}) => {
+export const ProfileLeftSide: React.FC<ProfileLeftSideProps> = ({
+  allPosts,
+}) => {
   return (
     <Box m={4}>
       <Flex flexDirection={"column"} gap={2}>

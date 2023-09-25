@@ -120,9 +120,15 @@ export type Query = {
   __typename?: "Query";
   Me?: Maybe<User>;
   hello: Scalars["String"]["output"];
+  myPosts: PaginatedPosts;
   post?: Maybe<Post>;
   posts: PaginatedPosts;
   users: Array<User>;
+};
+
+export type QueryMyPostsArgs = {
+  cursor?: InputMaybe<Scalars["String"]["input"]>;
+  limit: Scalars["Float"]["input"];
 };
 
 export type QueryPostArgs = {
@@ -315,6 +321,37 @@ export type MeQuery = {
     username: string;
     email: string;
   } | null;
+};
+
+export type MyPostsQueryVariables = Exact<{
+  limit: Scalars["Float"]["input"];
+  cursor?: InputMaybe<Scalars["String"]["input"]>;
+}>;
+
+export type MyPostsQuery = {
+  __typename?: "Query";
+  myPosts: {
+    __typename?: "PaginatedPosts";
+    hasMore: boolean;
+    Posts: Array<{
+      __typename?: "Post";
+      _id: number;
+      creatorId: number;
+      createdAt: any;
+      updatedAt: any;
+      title: string;
+      text: string;
+      points: number;
+      creator: {
+        __typename?: "User";
+        _id: number;
+        createdAt: any;
+        updatedAt: any;
+        username: string;
+        email: string;
+      };
+    }>;
+  };
 };
 
 export type PostQueryVariables = Exact<{
@@ -1038,6 +1075,127 @@ export const MeDocument = {
     },
   ],
 } as unknown as DocumentNode<MeQuery, MeQueryVariables>;
+export const MyPostsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "MyPosts" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "limit" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "Float" } },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "cursor" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "myPosts" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "limit" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "limit" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "cursor" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "cursor" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "Posts" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "_id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creatorId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "_id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "username" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "email" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "title" } },
+                      { kind: "Field", name: { kind: "Name", value: "text" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "points" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "hasMore" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MyPostsQuery, MyPostsQueryVariables>;
 export const PostDocument = {
   kind: "Document",
   definitions: [

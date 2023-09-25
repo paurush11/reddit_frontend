@@ -30,14 +30,14 @@ const Index = () => {
   const [{ data: meData }] = useQuery({
     query: MeDocument,
   });
-
+  console.log(data);
   return (
     <Layout variant="regular">
       {!data && fetching ? (
         <div>...loading</div>
       ) : (
         <Stack spacing={8}>
-          {data!.posts.Posts.map((post) =>
+          {data?.posts.Posts.map((post) =>
             !post ? null : (
               <Flex key={post._id} p={5} shadow="md" borderWidth="4px">
                 <UpvoteSection post={post} />

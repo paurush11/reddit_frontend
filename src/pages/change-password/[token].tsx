@@ -32,7 +32,7 @@ const ChangePassword: NextPage = () => {
 
           if (!response.data && response.error) {
             const errorMap = toErrorMapGraphql([response.error]);
-            console.log(errorMap.token);
+            console.log(errorMap);
             if (errorMap.token.includes(GQLTOKENERROR)) {
               setTokenError("Token Expired");
             }

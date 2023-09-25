@@ -34,6 +34,8 @@ const documents = {
     types.VoteDocument,
   "query Me {\n  Me {\n    _id\n    createdAt\n    updatedAt\n    username\n    email\n  }\n}":
     types.MeDocument,
+  "query MyPosts($limit: Float!, $cursor: String) {\n  myPosts(limit: $limit, cursor: $cursor) {\n    Posts {\n      _id\n      creatorId\n      creator {\n        _id\n        createdAt\n        updatedAt\n        username\n        email\n      }\n      createdAt\n      updatedAt\n      title\n      text\n      points\n    }\n    hasMore\n  }\n}":
+    types.MyPostsDocument,
   "query Post($identifier: Int!) {\n  post(identifier: $identifier) {\n    _id\n    creatorId\n    creator {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n    voteStatus\n    createdAt\n    updatedAt\n    title\n    text\n    points\n  }\n}":
     types.PostDocument,
   "query Posts($limit: Float!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    hasMore\n    Posts {\n      _id\n      creatorId\n      creator {\n        email\n        username\n        _id\n        createdAt\n        updatedAt\n      }\n      createdAt\n      title\n      text\n      points\n      voteStatus\n      updatedAt\n    }\n  }\n}":
@@ -120,6 +122,12 @@ export function graphql(
 export function graphql(
   source: "query Me {\n  Me {\n    _id\n    createdAt\n    updatedAt\n    username\n    email\n  }\n}",
 ): (typeof documents)["query Me {\n  Me {\n    _id\n    createdAt\n    updatedAt\n    username\n    email\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "query MyPosts($limit: Float!, $cursor: String) {\n  myPosts(limit: $limit, cursor: $cursor) {\n    Posts {\n      _id\n      creatorId\n      creator {\n        _id\n        createdAt\n        updatedAt\n        username\n        email\n      }\n      createdAt\n      updatedAt\n      title\n      text\n      points\n    }\n    hasMore\n  }\n}",
+): (typeof documents)["query MyPosts($limit: Float!, $cursor: String) {\n  myPosts(limit: $limit, cursor: $cursor) {\n    Posts {\n      _id\n      creatorId\n      creator {\n        _id\n        createdAt\n        updatedAt\n        username\n        email\n      }\n      createdAt\n      updatedAt\n      title\n      text\n      points\n    }\n    hasMore\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
