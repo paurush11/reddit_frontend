@@ -1,11 +1,7 @@
 import React from "react";
-import { Wrapper, variantWrapper } from "./Wrapper";
+import { Wrapper } from "./Wrapper";
 import Navbar from "./Navbar";
-
-interface LayoutProps {
-  variant?: variantWrapper;
-  children: any;
-}
+import { LayoutProps } from "../interfaces/allProps";
 
 export const Layout: React.FC<LayoutProps> = ({ variant, children }) => {
   return (

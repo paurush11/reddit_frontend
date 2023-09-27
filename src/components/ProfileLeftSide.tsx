@@ -1,14 +1,25 @@
-import { Box, Button, Flex } from "@chakra-ui/react";
-import React from "react";
-import { MyPostsQuery, Post } from "../generated/output/graphql";
-
-interface ProfileLeftSideProps {
-  allPosts: MyPostsQuery;
-}
+import { Box, Button, Flex, useQuery } from "@chakra-ui/react";
+import React, { useState } from "react";
+import {
+  GetCommentsQuery,
+  GetSavedPostsQuery,
+  MeQuery,
+  MyPostsDocument,
+  MyPostsQuery,
+  MyVotedPostsQuery,
+  Post,
+  PostsQuery,
+} from "../generated/output/graphql";
+import { ProfileLeftSideProps } from "../interfaces/allProps";
 
 export const ProfileLeftSide: React.FC<ProfileLeftSideProps> = ({
   allPosts,
 }) => {
+  const [variables, setVariables] = useState({
+    limit: 40,
+    cursor: null as null | string,
+  });
+
   return (
     <Box m={4}>
       <Flex flexDirection={"column"} gap={2}>

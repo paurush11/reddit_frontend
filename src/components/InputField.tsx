@@ -5,15 +5,9 @@ import {
   Input,
   Textarea,
 } from "@chakra-ui/react";
-import { FieldHookConfig, FieldInputProps, useField } from "formik";
+import { useField } from "formik";
 import React from "react";
-
-type InputFieldProps = Partial<FieldInputProps<any>> & {
-  name: string;
-  label: string;
-  type?: React.HTMLInputTypeAttribute;
-  textarea?: boolean;
-};
+import { InputFieldProps } from "../interfaces/allProps";
 
 export const InputField: React.FC<InputFieldProps> = ({
   label,

@@ -1,10 +1,6 @@
-import { Box, Flex, Grid, Img } from "@chakra-ui/react";
+import { Flex, Grid, Img } from "@chakra-ui/react";
 import React from "react";
-import { MeQuery, MeQueryVariables } from "../generated/output/graphql";
-
-interface ProfileRightSideProps {
-  meData: MeQuery;
-}
+import { ProfileRightSideProps } from "../interfaces/allProps";
 
 export const ProfileRightSide: React.FC<ProfileRightSideProps> = ({
   meData,
