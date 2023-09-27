@@ -1,6 +1,7 @@
 import React from "react";
 import { Wrapper, variantWrapper } from "./Wrapper";
-import { Navbar } from "./Navbar";
+import Navbar from "./Navbar";
+
 
 interface LayoutProps {
   variant?: variantWrapper;

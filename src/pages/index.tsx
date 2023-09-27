@@ -33,9 +33,11 @@ const Index = () => {
   console.log(data);
   return (
     <Layout variant="regular">
-      {!data && fetching ? (
+      {
+      !data && fetching ? (
         <div>...loading</div>
-      ) : (
+      ) : 
+      (
         <Stack spacing={8}>
           {data?.posts.Posts.map((post) =>
             !post ? null : (
@@ -43,9 +45,9 @@ const Index = () => {
                 <UpvoteSection post={post} />
                 <Box flex={1}>
                   <NextLink href={"/posts/[id]"} as={`/posts/${post._id}`}>
-                    <Link>
+                   
                       <Heading fontSize="xl">{post.title}</Heading>
-                    </Link>
+                   
                   </NextLink>
                   <Text> Posted By - {post.creator.username}</Text>
                   <Text mt={4}>{post.text.slice(0, 200)}</Text>
