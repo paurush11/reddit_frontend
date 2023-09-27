@@ -10,6 +10,7 @@ export const EditDeleteButtons = ({ post }: PostQuery) => {
   return (
     <>
       <IconButton
+      ml={2}
         as={Link}
         mr={2}
         aria-label={"edit"}

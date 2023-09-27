@@ -10,6 +10,7 @@ query MyPosts($limit: Float!, $cursor: String) {
         username
         email
       }
+     
       createdAt
       updatedAt
       title

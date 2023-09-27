@@ -7,12 +7,12 @@ import { useGetPostFromUrl } from "../../utils/useGetPostFromUrl";
 const Post = ({}) => {
   const [{ data, error, fetching }] = useGetPostFromUrl();
   return fetching ? (
-    <Layout>
+    <Layout variant="small">
       {" "}
       <div>loading...</div>
     </Layout>
   ) : (
-    <Layout>
+    <Layout variant="small">
       <Heading>{data?.post?.title}</Heading>
       <div>{data?.post?.text}</div>
     </Layout>

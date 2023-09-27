@@ -11,8 +11,6 @@ interface UpvoteSectionProps {
 export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
   const [, vote] = useMutation(VoteDocument);
   const iconColor = "red";
- 
-
   return (
     <Flex
       direction={"column"}

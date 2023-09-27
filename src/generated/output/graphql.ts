@@ -39,16 +39,25 @@ export type FieldError = {
 
 export type Mutation = {
   __typename?: "Mutation";
+  addComments?: Maybe<PostComments>;
   changePassword: UserResponse;
   createPost: Post;
   delete?: Maybe<Scalars["Boolean"]["output"]>;
+  deleteComment: Scalars["Boolean"]["output"];
   deletePost?: Maybe<Scalars["Boolean"]["output"]>;
+  deleteSavedPost: Scalars["Boolean"]["output"];
   forgotPassword: Scalars["Boolean"]["output"];
   login: UserResponse;
   logout: Scalars["Boolean"]["output"];
   register: UserResponse;
+  savePost: Scalars["Boolean"]["output"];
   updatePost?: Maybe<Post>;
   vote: Scalars["Boolean"]["output"];
+};
+
+export type MutationAddCommentsArgs = {
+  Description: Scalars["String"]["input"];
+  PostId: Scalars["Int"]["input"];
 };
 
 export type MutationChangePasswordArgs = {
@@ -64,8 +73,17 @@ export type MutationDeleteArgs = {
   username: Scalars["String"]["input"];
 };
 
+export type MutationDeleteCommentArgs = {
+  CommentId: Scalars["Int"]["input"];
+  PostId: Scalars["Int"]["input"];
+};
+
 export type MutationDeletePostArgs = {
   id: Scalars["Int"]["input"];
+};
+
+export type MutationDeleteSavedPostArgs = {
+  postId: Scalars["Int"]["input"];
 };
 
 export type MutationForgotPasswordArgs = {
@@ -79,6 +97,10 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterArgs = {
   options: UserNameOrEmailPassword;
+};
+
+export type MutationSavePostArgs = {
+  postId: Scalars["Int"]["input"];
 };
 
 export type MutationUpdatePostArgs = {
@@ -101,14 +123,29 @@ export type PaginatedPosts = {
 export type Post = {
   __typename?: "Post";
   _id: Scalars["Float"]["output"];
+  comments: Array<PostComments>;
   createdAt: Scalars["DateTime"]["output"];
   creator: User;
   creatorId: Scalars["Float"]["output"];
   points: Scalars["Float"]["output"];
+  savedPosts?: Maybe<Array<SavedPost>>;
   text: Scalars["String"]["output"];
   title: Scalars["String"]["output"];
   updatedAt: Scalars["DateTime"]["output"];
   voteStatus?: Maybe<Scalars["Int"]["output"]>;
+};
+
+export type PostComments = {
+  __typename?: "PostComments";
+  _id: Scalars["Float"]["output"];
+  createdAt: Scalars["DateTime"]["output"];
+  creator: User;
+  creatorId: Scalars["Float"]["output"];
+  description: Scalars["String"]["output"];
+  hasReplies: Scalars["Boolean"]["output"];
+  post: Post;
+  postId: Scalars["Float"]["output"];
+  updatedAt: Scalars["DateTime"]["output"];
 };
 
 export type PostInput = {
@@ -119,11 +156,18 @@ export type PostInput = {
 export type Query = {
   __typename?: "Query";
   Me?: Maybe<User>;
+  MyVotedPosts?: Maybe<Array<Post>>;
+  getComments: Array<PostComments>;
+  getSavedPosts: SavedPost;
   hello: Scalars["String"]["output"];
   myPosts: PaginatedPosts;
   post?: Maybe<Post>;
   posts: PaginatedPosts;
   users: Array<User>;
+};
+
+export type QueryGetSavedPostsArgs = {
+  postId: Scalars["Int"]["input"];
 };
 
 export type QueryMyPostsArgs = {
@@ -140,11 +184,32 @@ export type QueryPostsArgs = {
   limit: Scalars["Float"]["input"];
 };
 
+export type SavedPost = {
+  __typename?: "SavedPost";
+  _id: Scalars["Float"]["output"];
+  post: Post;
+  postId: Scalars["Float"]["output"];
+  user: User;
+  userId: Scalars["Float"]["output"];
+};
+
+export type UpVotes = {
+  __typename?: "UpVotes";
+  post: Post;
+  postId: Scalars["Float"]["output"];
+  user: User;
+  userId: Scalars["Float"]["output"];
+  value: Scalars["Float"]["output"];
+};
+
 export type User = {
   __typename?: "User";
   _id: Scalars["Float"]["output"];
+  comments?: Maybe<Array<PostComments>>;
   createdAt: Scalars["DateTime"]["output"];
   email: Scalars["String"]["output"];
+  savedPosts?: Maybe<Array<SavedPost>>;
+  upVotes?: Maybe<Array<UpVotes>>;
   updatedAt: Scalars["DateTime"]["output"];
   username: Scalars["String"]["output"];
 };
@@ -309,6 +374,49 @@ export type VoteMutationVariables = Exact<{
 
 export type VoteMutation = { __typename?: "Mutation"; vote: boolean };
 
+export type GetCommentsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetCommentsQuery = {
+  __typename?: "Query";
+  getComments: Array<{
+    __typename?: "PostComments";
+    description: string;
+    creatorId: number;
+    createdAt: any;
+    _id: number;
+    updatedAt: any;
+    postId: number;
+    creator: {
+      __typename?: "User";
+      email: string;
+      _id: number;
+      username: string;
+    };
+    post: {
+      __typename?: "Post";
+      text: string;
+      _id: number;
+      points: number;
+      title: string;
+      creator: { __typename?: "User"; username: string; _id: number };
+    };
+  }>;
+};
+
+export type GetSavedPostsQueryVariables = Exact<{
+  postId: Scalars["Int"]["input"];
+}>;
+
+export type GetSavedPostsQuery = {
+  __typename?: "Query";
+  getSavedPosts: {
+    __typename?: "SavedPost";
+    _id: number;
+    userId: number;
+    postId: number;
+  };
+};
+
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type MeQuery = {
@@ -321,6 +429,31 @@ export type MeQuery = {
     username: string;
     email: string;
   } | null;
+};
+
+export type MyVotedPostsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type MyVotedPostsQuery = {
+  __typename?: "Query";
+  MyVotedPosts?: Array<{
+    __typename?: "Post";
+    _id: number;
+    creatorId: number;
+    voteStatus?: number | null;
+    createdAt: any;
+    updatedAt: any;
+    title: string;
+    text: string;
+    points: number;
+    creator: {
+      __typename?: "User";
+      _id: number;
+      createdAt: any;
+      updatedAt: any;
+      username: string;
+      email: string;
+    };
+  }> | null;
 };
 
 export type MyPostsQueryVariables = Exact<{
@@ -364,7 +497,6 @@ export type PostQuery = {
     __typename?: "Post";
     _id: number;
     creatorId: number;
-    voteStatus?: number | null;
     createdAt: any;
     updatedAt: any;
     title: string;
@@ -1046,6 +1178,134 @@ export const VoteDocument = {
     },
   ],
 } as unknown as DocumentNode<VoteMutation, VoteMutationVariables>;
+export const GetCommentsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetComments" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "getComments" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "description" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "creator" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                      { kind: "Field", name: { kind: "Name", value: "_id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "username" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "post" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "text" } },
+                      { kind: "Field", name: { kind: "Name", value: "_id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "points" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "title" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "username" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "_id" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "creatorId" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                { kind: "Field", name: { kind: "Name", value: "_id" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                { kind: "Field", name: { kind: "Name", value: "postId" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetCommentsQuery, GetCommentsQueryVariables>;
+export const GetSavedPostsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetSavedPosts" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "postId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "getSavedPosts" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "postId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "postId" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "_id" } },
+                { kind: "Field", name: { kind: "Name", value: "userId" } },
+                { kind: "Field", name: { kind: "Name", value: "postId" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetSavedPostsQuery, GetSavedPostsQueryVariables>;
 export const MeDocument = {
   kind: "Document",
   definitions: [
@@ -1075,6 +1335,61 @@ export const MeDocument = {
     },
   ],
 } as unknown as DocumentNode<MeQuery, MeQueryVariables>;
+export const MyVotedPostsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "MyVotedPosts" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "MyVotedPosts" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "_id" } },
+                { kind: "Field", name: { kind: "Name", value: "creatorId" } },
+                { kind: "Field", name: { kind: "Name", value: "voteStatus" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                { kind: "Field", name: { kind: "Name", value: "title" } },
+                { kind: "Field", name: { kind: "Name", value: "text" } },
+                { kind: "Field", name: { kind: "Name", value: "points" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "creator" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "_id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "username" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MyVotedPostsQuery, MyVotedPostsQueryVariables>;
 export const MyPostsDocument = {
   kind: "Document",
   definitions: [
@@ -1260,7 +1575,6 @@ export const PostDocument = {
                     ],
                   },
                 },
-                { kind: "Field", name: { kind: "Name", value: "voteStatus" } },
                 { kind: "Field", name: { kind: "Name", value: "createdAt" } },
                 { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
                 { kind: "Field", name: { kind: "Name", value: "title" } },

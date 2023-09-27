@@ -4,13 +4,12 @@ import {
   Center,
   Flex,
   Heading,
-  
   IconButton,
   Link,
   Text,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import {AiOutlineUser} from "react-icons/ai"
+import { AiOutlineUser } from "react-icons/ai";
 
 import React from "react";
 import { useMutation, useQuery } from "urql";
@@ -24,21 +23,22 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
   const router = useRouter();
   const [{ data, fetching }] = useQuery({
     query: MeDocument,
-    
   });
   const [{ fetching: logoutFetching }, logout] = useMutation(LogoutDocument);
   let body = null;
-   if (!data?.Me) {
+  if (!data?.Me) {
     //user not logged in
     body = (
       <Flex alignContent={"center"} m={"auto"}>
-        <NextLink href={"/login"} passHref >
+        <NextLink href={"/login"} passHref>
           <Link as={Box} mr={2} color={"white"}>
             Login
           </Link>
         </NextLink>
         <NextLink href={"/register"} passHref>
-          <Link as={Box} color={"white"}>Register</Link>
+          <Link as={Box} color={"white"}>
+            Register
+          </Link>
         </NextLink>
       </Flex>
     );
@@ -52,10 +52,15 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
           </Link>
         </NextLink>
         <Flex gap={2}>
-          <Box as= {Button} mr={2} gap={2} onClick={()=>{
-            router.push("/")
-          }}>
-      <AiOutlineUser/>
+          <Box
+            as={Button}
+            mr={2}
+            gap={2}
+            onClick={() => {
+              router.push("/profile");
+            }}
+          >
+            <AiOutlineUser />
             {data.Me.username}
           </Box>
           <Button
@@ -83,9 +88,7 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
       alignItems={"center"}
     >
       <NextLink href={"/"} passHref>
-        
-          <Heading>LiReddit</Heading>
-        
+        <Heading>LiReddit</Heading>
       </NextLink>
 
       <Box ml={"auto"}>{body}</Box>
@@ -93,4 +96,4 @@ const Navbar: React.FC<NavbarProps> = ({}) => {
   );
 };
 
-export default Navbar
+export default Navbar;

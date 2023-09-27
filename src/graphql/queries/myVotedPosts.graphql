@@ -1,0 +1,20 @@
+query MyVotedPosts {
+  MyVotedPosts {
+    _id
+    creatorId
+    voteStatus
+    createdAt
+    updatedAt
+    title
+    text
+    points
+    creator {
+      _id
+      createdAt
+      updatedAt
+      username
+      email
+    }
+  }
+  
+}

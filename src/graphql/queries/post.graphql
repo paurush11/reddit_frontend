@@ -9,7 +9,6 @@ query Post($identifier: Int!) {
       username
       email
     }
-    voteStatus
     createdAt
     updatedAt
     title

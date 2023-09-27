@@ -32,11 +32,17 @@ const documents = {
     types.UpdatePostDocument,
   "mutation Vote($value: Int!, $postId: Int!) {\n  vote(value: $value, postId: $postId)\n}":
     types.VoteDocument,
+  "query GetComments {\n  getComments {\n    description\n    creator {\n      email\n      _id\n      username\n    }\n    post {\n      text\n      _id\n      points\n      title\n      creator {\n        username\n        _id\n      }\n    }\n    creatorId\n    createdAt\n    _id\n    updatedAt\n    postId\n  }\n}":
+    types.GetCommentsDocument,
+  "query GetSavedPosts($postId: Int!) {\n  getSavedPosts(postId: $postId) {\n    _id\n    userId\n    postId\n  }\n}":
+    types.GetSavedPostsDocument,
   "query Me {\n  Me {\n    _id\n    createdAt\n    updatedAt\n    username\n    email\n  }\n}":
     types.MeDocument,
+  "query MyVotedPosts {\n  MyVotedPosts {\n    _id\n    creatorId\n    voteStatus\n    createdAt\n    updatedAt\n    title\n    text\n    points\n    creator {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n  }\n}":
+    types.MyVotedPostsDocument,
   "query MyPosts($limit: Float!, $cursor: String) {\n  myPosts(limit: $limit, cursor: $cursor) {\n    Posts {\n      _id\n      creatorId\n      creator {\n        _id\n        createdAt\n        updatedAt\n        username\n        email\n      }\n      createdAt\n      updatedAt\n      title\n      text\n      points\n    }\n    hasMore\n  }\n}":
     types.MyPostsDocument,
-  "query Post($identifier: Int!) {\n  post(identifier: $identifier) {\n    _id\n    creatorId\n    creator {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n    voteStatus\n    createdAt\n    updatedAt\n    title\n    text\n    points\n  }\n}":
+  "query Post($identifier: Int!) {\n  post(identifier: $identifier) {\n    _id\n    creatorId\n    creator {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n    createdAt\n    updatedAt\n    title\n    text\n    points\n  }\n}":
     types.PostDocument,
   "query Posts($limit: Float!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    hasMore\n    Posts {\n      _id\n      creatorId\n      creator {\n        email\n        username\n        _id\n        createdAt\n        updatedAt\n      }\n      createdAt\n      title\n      text\n      points\n      voteStatus\n      updatedAt\n    }\n  }\n}":
     types.PostsDocument,
@@ -120,8 +126,26 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: "query GetComments {\n  getComments {\n    description\n    creator {\n      email\n      _id\n      username\n    }\n    post {\n      text\n      _id\n      points\n      title\n      creator {\n        username\n        _id\n      }\n    }\n    creatorId\n    createdAt\n    _id\n    updatedAt\n    postId\n  }\n}",
+): (typeof documents)["query GetComments {\n  getComments {\n    description\n    creator {\n      email\n      _id\n      username\n    }\n    post {\n      text\n      _id\n      points\n      title\n      creator {\n        username\n        _id\n      }\n    }\n    creatorId\n    createdAt\n    _id\n    updatedAt\n    postId\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "query GetSavedPosts($postId: Int!) {\n  getSavedPosts(postId: $postId) {\n    _id\n    userId\n    postId\n  }\n}",
+): (typeof documents)["query GetSavedPosts($postId: Int!) {\n  getSavedPosts(postId: $postId) {\n    _id\n    userId\n    postId\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: "query Me {\n  Me {\n    _id\n    createdAt\n    updatedAt\n    username\n    email\n  }\n}",
 ): (typeof documents)["query Me {\n  Me {\n    _id\n    createdAt\n    updatedAt\n    username\n    email\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "query MyVotedPosts {\n  MyVotedPosts {\n    _id\n    creatorId\n    voteStatus\n    createdAt\n    updatedAt\n    title\n    text\n    points\n    creator {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n  }\n}",
+): (typeof documents)["query MyVotedPosts {\n  MyVotedPosts {\n    _id\n    creatorId\n    voteStatus\n    createdAt\n    updatedAt\n    title\n    text\n    points\n    creator {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -132,8 +156,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "query Post($identifier: Int!) {\n  post(identifier: $identifier) {\n    _id\n    creatorId\n    creator {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n    voteStatus\n    createdAt\n    updatedAt\n    title\n    text\n    points\n  }\n}",
-): (typeof documents)["query Post($identifier: Int!) {\n  post(identifier: $identifier) {\n    _id\n    creatorId\n    creator {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n    voteStatus\n    createdAt\n    updatedAt\n    title\n    text\n    points\n  }\n}"];
+  source: "query Post($identifier: Int!) {\n  post(identifier: $identifier) {\n    _id\n    creatorId\n    creator {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n    createdAt\n    updatedAt\n    title\n    text\n    points\n  }\n}",
+): (typeof documents)["query Post($identifier: Int!) {\n  post(identifier: $identifier) {\n    _id\n    creatorId\n    creator {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n    createdAt\n    updatedAt\n    title\n    text\n    points\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

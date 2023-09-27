@@ -1,0 +1,25 @@
+query GetComments {
+  getComments {
+    description
+    creator {
+      email
+      _id
+      username
+    }
+    post {
+      text
+      _id
+      points
+      title
+      creator {
+        username
+        _id
+      }
+    }
+    creatorId
+    createdAt
+    _id
+    updatedAt
+    postId
+  }
+}
