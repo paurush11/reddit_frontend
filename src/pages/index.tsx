@@ -30,7 +30,7 @@ const Index = () => {
   const [{ data: meData }] = useQuery({
     query: MeDocument,
   });
-  console.log(data);
+
   return (
     <Layout variant="regular">
       {
