@@ -28,13 +28,15 @@ const documents = {
   "mutation Logout {\n  logout\n}": types.LogoutDocument,
   "mutation Register($options: UserNameOrEmailPassword!) {\n  register(options: $options) {\n    user {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n    errors {\n      field\n      message\n    }\n  }\n}":
     types.RegisterDocument,
+  "mutation SavePost($postId: Int!) {\n  savePost(postId: $postId)\n}":
+    types.SavePostDocument,
   "mutation UpdatePost($updatePostId: Int!, $text: String, $title: String) {\n  updatePost(id: $updatePostId, Text: $text, Title: $title) {\n    _id\n    creatorId\n    createdAt\n    updatedAt\n    title\n    text\n  }\n}":
     types.UpdatePostDocument,
   "mutation Vote($value: Int!, $postId: Int!) {\n  vote(value: $value, postId: $postId)\n}":
     types.VoteDocument,
   "query GetComments {\n  getComments {\n    description\n    creator {\n      email\n      _id\n      username\n    }\n    post {\n      text\n      _id\n      points\n      title\n      creator {\n        username\n        _id\n      }\n    }\n    creatorId\n    createdAt\n    _id\n    updatedAt\n    postId\n  }\n}":
     types.GetCommentsDocument,
-  "query GetSavedPosts($postId: Int!) {\n  getSavedPosts(postId: $postId) {\n    _id\n    userId\n    postId\n  }\n}":
+  "query GetSavedPosts($limit: Float!, $cursor: String) {\n  getSavedPosts(limit: $limit, cursor: $cursor) {\n    hasMore\n    Posts {\n      _id\n      creatorId\n      creator {\n        username\n      }\n      comments {\n        description\n        creator {\n          username\n        }\n      }\n      voteStatus\n      createdAt\n      updatedAt\n      title\n      text\n      points\n      savedBy\n    }\n  }\n}":
     types.GetSavedPostsDocument,
   "query Me {\n  Me {\n    _id\n    createdAt\n    updatedAt\n    username\n    email\n  }\n}":
     types.MeDocument,
@@ -42,9 +44,9 @@ const documents = {
     types.MyVotedPostsDocument,
   "query MyPosts($limit: Float!, $cursor: String) {\n  myPosts(limit: $limit, cursor: $cursor) {\n    Posts {\n      _id\n      creatorId\n      creator {\n        _id\n        createdAt\n        updatedAt\n        username\n        email\n      }\n      createdAt\n      updatedAt\n      title\n      text\n      points\n    }\n    hasMore\n  }\n}":
     types.MyPostsDocument,
-  "query Post($identifier: Int!) {\n  post(identifier: $identifier) {\n    _id\n    creatorId\n    creator {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n    createdAt\n    updatedAt\n    title\n    text\n    points\n  }\n}":
+  "query Post($identifier: Int!) {\n  post(identifier: $identifier) {\n    _id\n    creatorId\n    creator {\n      username\n      email\n      createdAt\n      _id\n    }\n    comments {\n      description\n      createdAt\n      creator {\n        username\n      }\n      _id\n      hasReplies\n    }\n    voteStatus\n    createdAt\n    updatedAt\n    title\n    text\n    points\n    savedBy\n    hiddenBy\n  }\n}":
     types.PostDocument,
-  "query Posts($limit: Float!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    hasMore\n    Posts {\n      _id\n      creatorId\n      creator {\n        email\n        username\n        _id\n        createdAt\n        updatedAt\n      }\n      createdAt\n      title\n      text\n      points\n      voteStatus\n      updatedAt\n    }\n  }\n}":
+  "query Posts($limit: Float!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    hasMore\n    Posts {\n      _id\n      creatorId\n      creator {\n        username\n        _id\n        email\n        createdAt\n      }\n      comments {\n        description\n        creator {\n          username\n        }\n        _id\n        hasReplies\n        createdAt\n      }\n      voteStatus\n      createdAt\n      updatedAt\n      title\n      text\n      points\n      savedBy\n      hiddenBy\n    }\n  }\n}":
     types.PostsDocument,
 };
 
@@ -114,6 +116,12 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+  source: "mutation SavePost($postId: Int!) {\n  savePost(postId: $postId)\n}",
+): (typeof documents)["mutation SavePost($postId: Int!) {\n  savePost(postId: $postId)\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
   source: "mutation UpdatePost($updatePostId: Int!, $text: String, $title: String) {\n  updatePost(id: $updatePostId, Text: $text, Title: $title) {\n    _id\n    creatorId\n    createdAt\n    updatedAt\n    title\n    text\n  }\n}",
 ): (typeof documents)["mutation UpdatePost($updatePostId: Int!, $text: String, $title: String) {\n  updatePost(id: $updatePostId, Text: $text, Title: $title) {\n    _id\n    creatorId\n    createdAt\n    updatedAt\n    title\n    text\n  }\n}"];
 /**
@@ -132,8 +140,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "query GetSavedPosts($postId: Int!) {\n  getSavedPosts(postId: $postId) {\n    _id\n    userId\n    postId\n  }\n}",
-): (typeof documents)["query GetSavedPosts($postId: Int!) {\n  getSavedPosts(postId: $postId) {\n    _id\n    userId\n    postId\n  }\n}"];
+  source: "query GetSavedPosts($limit: Float!, $cursor: String) {\n  getSavedPosts(limit: $limit, cursor: $cursor) {\n    hasMore\n    Posts {\n      _id\n      creatorId\n      creator {\n        username\n      }\n      comments {\n        description\n        creator {\n          username\n        }\n      }\n      voteStatus\n      createdAt\n      updatedAt\n      title\n      text\n      points\n      savedBy\n    }\n  }\n}",
+): (typeof documents)["query GetSavedPosts($limit: Float!, $cursor: String) {\n  getSavedPosts(limit: $limit, cursor: $cursor) {\n    hasMore\n    Posts {\n      _id\n      creatorId\n      creator {\n        username\n      }\n      comments {\n        description\n        creator {\n          username\n        }\n      }\n      voteStatus\n      createdAt\n      updatedAt\n      title\n      text\n      points\n      savedBy\n    }\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -156,14 +164,14 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "query Post($identifier: Int!) {\n  post(identifier: $identifier) {\n    _id\n    creatorId\n    creator {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n    createdAt\n    updatedAt\n    title\n    text\n    points\n  }\n}",
-): (typeof documents)["query Post($identifier: Int!) {\n  post(identifier: $identifier) {\n    _id\n    creatorId\n    creator {\n      _id\n      createdAt\n      updatedAt\n      username\n      email\n    }\n    createdAt\n    updatedAt\n    title\n    text\n    points\n  }\n}"];
+  source: "query Post($identifier: Int!) {\n  post(identifier: $identifier) {\n    _id\n    creatorId\n    creator {\n      username\n      email\n      createdAt\n      _id\n    }\n    comments {\n      description\n      createdAt\n      creator {\n        username\n      }\n      _id\n      hasReplies\n    }\n    voteStatus\n    createdAt\n    updatedAt\n    title\n    text\n    points\n    savedBy\n    hiddenBy\n  }\n}",
+): (typeof documents)["query Post($identifier: Int!) {\n  post(identifier: $identifier) {\n    _id\n    creatorId\n    creator {\n      username\n      email\n      createdAt\n      _id\n    }\n    comments {\n      description\n      createdAt\n      creator {\n        username\n      }\n      _id\n      hasReplies\n    }\n    voteStatus\n    createdAt\n    updatedAt\n    title\n    text\n    points\n    savedBy\n    hiddenBy\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "query Posts($limit: Float!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    hasMore\n    Posts {\n      _id\n      creatorId\n      creator {\n        email\n        username\n        _id\n        createdAt\n        updatedAt\n      }\n      createdAt\n      title\n      text\n      points\n      voteStatus\n      updatedAt\n    }\n  }\n}",
-): (typeof documents)["query Posts($limit: Float!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    hasMore\n    Posts {\n      _id\n      creatorId\n      creator {\n        email\n        username\n        _id\n        createdAt\n        updatedAt\n      }\n      createdAt\n      title\n      text\n      points\n      voteStatus\n      updatedAt\n    }\n  }\n}"];
+  source: "query Posts($limit: Float!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    hasMore\n    Posts {\n      _id\n      creatorId\n      creator {\n        username\n        _id\n        email\n        createdAt\n      }\n      comments {\n        description\n        creator {\n          username\n        }\n        _id\n        hasReplies\n        createdAt\n      }\n      voteStatus\n      createdAt\n      updatedAt\n      title\n      text\n      points\n      savedBy\n      hiddenBy\n    }\n  }\n}",
+): (typeof documents)["query Posts($limit: Float!, $cursor: String) {\n  posts(limit: $limit, cursor: $cursor) {\n    hasMore\n    Posts {\n      _id\n      creatorId\n      creator {\n        username\n        _id\n        email\n        createdAt\n      }\n      comments {\n        description\n        creator {\n          username\n        }\n        _id\n        hasReplies\n        createdAt\n      }\n      voteStatus\n      createdAt\n      updatedAt\n      title\n      text\n      points\n      savedBy\n      hiddenBy\n    }\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

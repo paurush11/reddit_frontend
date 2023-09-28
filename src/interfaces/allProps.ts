@@ -2,10 +2,8 @@ import { FieldInputProps } from "formik";
 
 import {
   GetCommentsQuery,
-  GetSavedPostsQuery,
   MeQuery,
   MyPostsQuery,
-  MyVotedPostsQuery,
   PostsQuery,
 } from "../generated/output/graphql";
 
@@ -13,13 +11,26 @@ export interface ProfileLeftSideProps {
   allPosts: MyPostsQuery;
 }
 export interface PostsProps {
-  postData?: PostsQuery;
+  postData?: PostsQuery["posts"]["Posts"];
   meData: MeQuery;
-  myPostData?: MyPostsQuery;
+
   myCommentData?: GetCommentsQuery;
-  myVotedPostData?: MyVotedPostsQuery;
-  mySavedPostData?: GetSavedPostsQuery;
+
+  dataType: postDataType;
 }
+export interface postPaginationProps {
+  variables: {
+    limit: number;
+    cursor: string;
+  };
+  setVariables: React.Dispatch<
+    React.SetStateAction<{
+      limit: number;
+      cursor: string;
+    }>
+  >;
+}
+export type postDataType = "allPostData" | "mySavedPostData" | "myCommentsData";
 
 export interface LayoutProps {
   variant?: variantWrapper;

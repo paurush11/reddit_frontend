@@ -3,16 +3,27 @@ query Post($identifier: Int!) {
     _id
     creatorId
     creator {
-      _id
-      createdAt
-      updatedAt
       username
       email
+      createdAt
+      _id
     }
+    comments {
+      description
+      createdAt
+      creator {
+        username
+      }
+      _id
+      hasReplies
+    }
+    voteStatus
     createdAt
     updatedAt
     title
     text
     points
+    savedBy
+    hiddenBy
   }
 }

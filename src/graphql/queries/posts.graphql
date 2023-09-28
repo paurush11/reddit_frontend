@@ -5,18 +5,28 @@ query Posts($limit: Float!, $cursor: String) {
       _id
       creatorId
       creator {
-        email
         username
         _id
+        email
         createdAt
-        updatedAt
       }
+      comments {
+        description
+        creator {
+          username
+        }
+        _id
+        hasReplies
+        createdAt
+      }
+      voteStatus
       createdAt
+      updatedAt
       title
       text
       points
-      voteStatus
-      updatedAt
+      savedBy
+      hiddenBy
     }
   }
 }

@@ -26,7 +26,11 @@ const Index = () => {
       {!data && fetching ? (
         <div>...loading</div>
       ) : (
-        <Posts postData={data} meData={meData} />
+        <Posts
+          postData={data.posts.Posts}
+          meData={meData}
+          dataType="allPostData"
+        />
       )}
 
       {data && data.posts.hasMore ? (

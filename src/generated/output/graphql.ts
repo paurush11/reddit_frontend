@@ -47,10 +47,12 @@ export type Mutation = {
   deletePost?: Maybe<Scalars["Boolean"]["output"]>;
   deleteSavedPost: Scalars["Boolean"]["output"];
   forgotPassword: Scalars["Boolean"]["output"];
+  hidePost: Scalars["Boolean"]["output"];
   login: UserResponse;
   logout: Scalars["Boolean"]["output"];
   register: UserResponse;
   savePost: Scalars["Boolean"]["output"];
+  unHidePost: Scalars["Boolean"]["output"];
   updatePost?: Maybe<Post>;
   vote: Scalars["Boolean"]["output"];
 };
@@ -90,6 +92,10 @@ export type MutationForgotPasswordArgs = {
   UserNameOrEmail: Scalars["String"]["input"];
 };
 
+export type MutationHidePostArgs = {
+  id: Scalars["Int"]["input"];
+};
+
 export type MutationLoginArgs = {
   UserNameOrEmail: Scalars["String"]["input"];
   password: Scalars["String"]["input"];
@@ -101,6 +107,10 @@ export type MutationRegisterArgs = {
 
 export type MutationSavePostArgs = {
   postId: Scalars["Int"]["input"];
+};
+
+export type MutationUnHidePostArgs = {
+  id: Scalars["Int"]["input"];
 };
 
 export type MutationUpdatePostArgs = {
@@ -127,8 +137,9 @@ export type Post = {
   createdAt: Scalars["DateTime"]["output"];
   creator: User;
   creatorId: Scalars["Float"]["output"];
+  hiddenBy?: Maybe<Array<Scalars["Int"]["output"]>>;
   points: Scalars["Float"]["output"];
-  savedPosts?: Maybe<Array<SavedPost>>;
+  savedBy?: Maybe<Array<Scalars["Int"]["output"]>>;
   text: Scalars["String"]["output"];
   title: Scalars["String"]["output"];
   updatedAt: Scalars["DateTime"]["output"];
@@ -158,7 +169,8 @@ export type Query = {
   Me?: Maybe<User>;
   MyVotedPosts?: Maybe<Array<Post>>;
   getComments: Array<PostComments>;
-  getSavedPosts: SavedPost;
+  getHiddenPosts: PaginatedPosts;
+  getSavedPosts: PaginatedPosts;
   hello: Scalars["String"]["output"];
   myPosts: PaginatedPosts;
   post?: Maybe<Post>;
@@ -166,8 +178,14 @@ export type Query = {
   users: Array<User>;
 };
 
+export type QueryGetHiddenPostsArgs = {
+  cursor?: InputMaybe<Scalars["String"]["input"]>;
+  limit: Scalars["Float"]["input"];
+};
+
 export type QueryGetSavedPostsArgs = {
-  postId: Scalars["Int"]["input"];
+  cursor?: InputMaybe<Scalars["String"]["input"]>;
+  limit: Scalars["Float"]["input"];
 };
 
 export type QueryMyPostsArgs = {
@@ -182,15 +200,6 @@ export type QueryPostArgs = {
 export type QueryPostsArgs = {
   cursor?: InputMaybe<Scalars["String"]["input"]>;
   limit: Scalars["Float"]["input"];
-};
-
-export type SavedPost = {
-  __typename?: "SavedPost";
-  _id: Scalars["Float"]["output"];
-  post: Post;
-  postId: Scalars["Float"]["output"];
-  user: User;
-  userId: Scalars["Float"]["output"];
 };
 
 export type UpVotes = {
@@ -208,7 +217,6 @@ export type User = {
   comments?: Maybe<Array<PostComments>>;
   createdAt: Scalars["DateTime"]["output"];
   email: Scalars["String"]["output"];
-  savedPosts?: Maybe<Array<SavedPost>>;
   upVotes?: Maybe<Array<UpVotes>>;
   updatedAt: Scalars["DateTime"]["output"];
   username: Scalars["String"]["output"];
@@ -348,6 +356,12 @@ export type RegisterMutation = {
   };
 };
 
+export type SavePostMutationVariables = Exact<{
+  postId: Scalars["Int"]["input"];
+}>;
+
+export type SavePostMutation = { __typename?: "Mutation"; savePost: boolean };
+
 export type UpdatePostMutationVariables = Exact<{
   updatePostId: Scalars["Int"]["input"];
   text?: InputMaybe<Scalars["String"]["input"]>;
@@ -404,16 +418,33 @@ export type GetCommentsQuery = {
 };
 
 export type GetSavedPostsQueryVariables = Exact<{
-  postId: Scalars["Int"]["input"];
+  limit: Scalars["Float"]["input"];
+  cursor?: InputMaybe<Scalars["String"]["input"]>;
 }>;
 
 export type GetSavedPostsQuery = {
   __typename?: "Query";
   getSavedPosts: {
-    __typename?: "SavedPost";
-    _id: number;
-    userId: number;
-    postId: number;
+    __typename?: "PaginatedPosts";
+    hasMore: boolean;
+    Posts: Array<{
+      __typename?: "Post";
+      _id: number;
+      creatorId: number;
+      voteStatus?: number | null;
+      createdAt: any;
+      updatedAt: any;
+      title: string;
+      text: string;
+      points: number;
+      savedBy?: Array<number> | null;
+      creator: { __typename?: "User"; username: string };
+      comments: Array<{
+        __typename?: "PostComments";
+        description: string;
+        creator: { __typename?: "User"; username: string };
+      }>;
+    }>;
   };
 };
 
@@ -497,19 +528,29 @@ export type PostQuery = {
     __typename?: "Post";
     _id: number;
     creatorId: number;
+    voteStatus?: number | null;
     createdAt: any;
     updatedAt: any;
     title: string;
     text: string;
     points: number;
+    savedBy?: Array<number> | null;
+    hiddenBy?: Array<number> | null;
     creator: {
       __typename?: "User";
-      _id: number;
-      createdAt: any;
-      updatedAt: any;
       username: string;
       email: string;
+      createdAt: any;
+      _id: number;
     };
+    comments: Array<{
+      __typename?: "PostComments";
+      description: string;
+      createdAt: any;
+      _id: number;
+      hasReplies: boolean;
+      creator: { __typename?: "User"; username: string };
+    }>;
   } | null;
 };
 
@@ -527,20 +568,29 @@ export type PostsQuery = {
       __typename?: "Post";
       _id: number;
       creatorId: number;
+      voteStatus?: number | null;
       createdAt: any;
+      updatedAt: any;
       title: string;
       text: string;
       points: number;
-      voteStatus?: number | null;
-      updatedAt: any;
+      savedBy?: Array<number> | null;
+      hiddenBy?: Array<number> | null;
       creator: {
         __typename?: "User";
-        email: string;
         username: string;
         _id: number;
+        email: string;
         createdAt: any;
-        updatedAt: any;
       };
+      comments: Array<{
+        __typename?: "PostComments";
+        description: string;
+        _id: number;
+        hasReplies: boolean;
+        createdAt: any;
+        creator: { __typename?: "User"; username: string };
+      }>;
     }>;
   };
 };
@@ -1035,6 +1085,48 @@ export const RegisterDocument = {
     },
   ],
 } as unknown as DocumentNode<RegisterMutation, RegisterMutationVariables>;
+export const SavePostDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "SavePost" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "postId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "savePost" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "postId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "postId" },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SavePostMutation, SavePostMutationVariables>;
 export const UpdatePostDocument = {
   kind: "Document",
   definitions: [
@@ -1268,12 +1360,20 @@ export const GetSavedPostsDocument = {
           kind: "VariableDefinition",
           variable: {
             kind: "Variable",
-            name: { kind: "Name", value: "postId" },
+            name: { kind: "Name", value: "limit" },
           },
           type: {
             kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+            type: { kind: "NamedType", name: { kind: "Name", value: "Float" } },
           },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "cursor" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
         },
       ],
       selectionSet: {
@@ -1285,19 +1385,100 @@ export const GetSavedPostsDocument = {
             arguments: [
               {
                 kind: "Argument",
-                name: { kind: "Name", value: "postId" },
+                name: { kind: "Name", value: "limit" },
                 value: {
                   kind: "Variable",
-                  name: { kind: "Name", value: "postId" },
+                  name: { kind: "Name", value: "limit" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "cursor" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "cursor" },
                 },
               },
             ],
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "_id" } },
-                { kind: "Field", name: { kind: "Name", value: "userId" } },
-                { kind: "Field", name: { kind: "Name", value: "postId" } },
+                { kind: "Field", name: { kind: "Name", value: "hasMore" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "Posts" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "_id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creatorId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "username" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "comments" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "description" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "creator" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "username" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "voteStatus" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "title" } },
+                      { kind: "Field", name: { kind: "Name", value: "text" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "points" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "savedBy" },
+                      },
+                    ],
+                  },
+                },
               ],
             },
           },
@@ -1558,28 +1739,62 @@ export const PostDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "username" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "email" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
                       { kind: "Field", name: { kind: "Name", value: "_id" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "comments" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "description" },
+                      },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "createdAt" },
                       },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "updatedAt" },
+                        name: { kind: "Name", value: "creator" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "username" },
+                            },
+                          ],
+                        },
                       },
+                      { kind: "Field", name: { kind: "Name", value: "_id" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "username" },
+                        name: { kind: "Name", value: "hasReplies" },
                       },
-                      { kind: "Field", name: { kind: "Name", value: "email" } },
                     ],
                   },
                 },
+                { kind: "Field", name: { kind: "Name", value: "voteStatus" } },
                 { kind: "Field", name: { kind: "Name", value: "createdAt" } },
                 { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
                 { kind: "Field", name: { kind: "Name", value: "title" } },
                 { kind: "Field", name: { kind: "Name", value: "text" } },
                 { kind: "Field", name: { kind: "Name", value: "points" } },
+                { kind: "Field", name: { kind: "Name", value: "savedBy" } },
+                { kind: "Field", name: { kind: "Name", value: "hiddenBy" } },
               ],
             },
           },
@@ -1663,10 +1878,6 @@ export const PostsDocument = {
                           selections: [
                             {
                               kind: "Field",
-                              name: { kind: "Name", value: "email" },
-                            },
-                            {
-                              kind: "Field",
                               name: { kind: "Name", value: "username" },
                             },
                             {
@@ -1675,18 +1886,64 @@ export const PostsDocument = {
                             },
                             {
                               kind: "Field",
-                              name: { kind: "Name", value: "createdAt" },
+                              name: { kind: "Name", value: "email" },
                             },
                             {
                               kind: "Field",
-                              name: { kind: "Name", value: "updatedAt" },
+                              name: { kind: "Name", value: "createdAt" },
                             },
                           ],
                         },
                       },
                       {
                         kind: "Field",
+                        name: { kind: "Name", value: "comments" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "description" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "creator" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "username" },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "_id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hasReplies" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "voteStatus" },
+                      },
+                      {
+                        kind: "Field",
                         name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
                       },
                       { kind: "Field", name: { kind: "Name", value: "title" } },
                       { kind: "Field", name: { kind: "Name", value: "text" } },
@@ -1696,11 +1953,11 @@ export const PostsDocument = {
                       },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "voteStatus" },
+                        name: { kind: "Name", value: "savedBy" },
                       },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "updatedAt" },
+                        name: { kind: "Name", value: "hiddenBy" },
                       },
                     ],
                   },

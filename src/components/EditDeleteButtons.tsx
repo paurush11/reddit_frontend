@@ -4,7 +4,11 @@ import { useRouter } from "next/router";
 import { useMutation } from "urql";
 import { DeletePostDocument, PostQuery } from "../generated/output/graphql";
 
-export const EditDeleteButtons = ({ post }: PostQuery) => {
+export interface PostSectionProps {
+  post: PostQuery["post"];
+}
+
+export const EditDeleteButtons: React.FC<PostSectionProps> = ({ post }) => {
   const [, deletePost] = useMutation(DeletePostDocument);
   const router = useRouter();
   return (

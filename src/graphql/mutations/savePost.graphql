@@ -1,0 +1,3 @@
+mutation SavePost($postId: Int!) {
+  savePost(postId: $postId)
+}

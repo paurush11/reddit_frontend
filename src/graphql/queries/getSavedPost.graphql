@@ -1,7 +1,25 @@
-query GetSavedPosts($postId: Int!) {
-  getSavedPosts(postId: $postId) {
-    _id
-    userId
-    postId
+query GetSavedPosts($limit: Float!, $cursor: String) {
+  getSavedPosts(limit: $limit, cursor: $cursor) {
+    hasMore
+     Posts {
+      _id
+      creatorId
+      creator {
+        username
+      }
+      comments {
+        description
+        creator {
+          username
+        }
+      }
+      voteStatus
+      createdAt
+      updatedAt
+      title
+      text
+      points
+      savedBy
+    }
   }
 }
